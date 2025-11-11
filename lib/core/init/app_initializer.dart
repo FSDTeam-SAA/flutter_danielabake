@@ -1,4 +1,3 @@
-import 'package:danielabake/core/network/socket_client.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -24,8 +23,8 @@ class AppInitializer {
 
     setupServiceLocator();
 
-    SocketClient().connect();
-    // Wait for connection
-    SocketClient().onReady;
+    // SocketClient().connect();
+    // // Wait for connection
+    // SocketClient().onReady;
   }
 }
