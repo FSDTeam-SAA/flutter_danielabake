@@ -10,8 +10,8 @@ class AppTheme {
     colorScheme: ColorScheme.light(primary: AppColors.primaryButtonDeep),
 
     textTheme: GoogleFonts.poppinsTextTheme(ThemeData.light().textTheme).apply(
-      bodyColor: AppColors.primaryWhite,
-      displayColor: AppColors.primaryWhite,
+      bodyColor: AppColors.primaryBlack,
+      displayColor: AppColors.primaryBlack,
     ),
 
     appBarTheme: AppBarThemeData(
