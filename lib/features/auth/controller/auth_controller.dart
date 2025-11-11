@@ -1,5 +1,5 @@
 import 'package:danielabake/core/base/base_controller.dart';
-import 'package:danielabake/core/utils/debug_print.dart';
+import 'package:flutx_core/core/debug_print.dart';
 import 'package:danielabake/features/auth/models/request/login_request_model.dart';
 import 'package:danielabake/features/auth/repositories/auth_repository.dart';
 import 'package:get/get.dart';

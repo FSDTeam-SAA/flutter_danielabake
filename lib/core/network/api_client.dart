@@ -15,7 +15,7 @@ import 'models/base_response.dart';
 import 'models/network_failure.dart';
 import 'services/connectivity_service.dart';
 import '/core/network/models/network_success.dart';
-import '/core/utils/debug_print.dart';
+import 'package:flutx_core/core/debug_print.dart';
 import 'services/auth_storage_service.dart';
 
 import '/features/auth/screens/login_screen.dart';

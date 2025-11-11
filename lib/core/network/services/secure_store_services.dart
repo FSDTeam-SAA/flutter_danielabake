@@ -1,6 +1,6 @@
 // lib/core/network/services/secure_store_services.dart
 
-import '/core/utils/debug_print.dart';
+import 'package:flutx_core/core/debug_print.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStoreServices {

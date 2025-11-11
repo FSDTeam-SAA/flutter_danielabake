@@ -3,12 +3,11 @@ import 'package:danielabake/core/common/widgets/app_scaffold.dart';
 import 'package:danielabake/core/common/widgets/button_widgets.dart';
 import 'package:danielabake/core/extensions/input_decoration_extensions.dart';
 import 'package:danielabake/core/network/socket_client.dart';
-import 'package:danielabake/core/utils/debug_print.dart';
-import 'package:danielabake/core/utils/gap_helper.dart';
+
 import 'package:danielabake/features/auth/controller/auth_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutx_core/flutx_core.dart' hide Gap, DPrint;
-import 'package:flutter/widgets.dart';
+import 'package:flutx_core/flutx_core.dart';
+
 import 'package:get/get.dart';
 
 import '../../../core/theme/app_colors.dart';

@@ -3,7 +3,7 @@
 import '../../../features/auth/models/response/auth_response_model.dart';
 import '/features/auth/repositories/auth_repository.dart';
 import '/core/base/base_controller.dart';
-import '/core/utils/debug_print.dart';
+import 'package:flutx_core/core/debug_print.dart';
 import '/core/network/models/refresh_token_request_model.dart';
 import 'auth_storage_service.dart';
 
