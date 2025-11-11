@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import '/core/utils/debug_print.dart';
+import 'package:flutx_core/core/debug_print.dart';
 import 'package:flutter/foundation.dart';
 
 class ConnectivityService {

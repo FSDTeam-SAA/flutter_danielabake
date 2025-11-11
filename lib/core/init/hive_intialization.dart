@@ -2,7 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import '../network/constants/cache_constants.dart';
 import '../network/models/hive_cache_model.dart';
-import '/core/utils/debug_print.dart';
+import 'package:flutx_core/core/debug_print.dart';
 
 class HiveInitialization {
   static Future<void> initHive() async {

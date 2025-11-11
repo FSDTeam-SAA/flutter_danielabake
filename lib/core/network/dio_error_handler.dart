@@ -2,7 +2,7 @@
 
 import 'package:dio/dio.dart';
 
-import '/core/utils/debug_print.dart';
+import 'package:flutx_core/core/debug_print.dart';
 
 String dioErrorToUserMessage(DioException error) {
   // First try to get message from response body

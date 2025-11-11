@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import '/core/utils/debug_print.dart';
+import 'package:flutx_core/core/debug_print.dart';
 
 /// Interface for token storage operations
 abstract class TokenStorageService {
   Future<String?> getAccessToken();
   Future<String?> getRefreshToken();
-  Future<void> storeTokens({required String accessToken, required String refreshToken});
+  Future<void> storeTokens({
+    required String accessToken,
+    required String refreshToken,
+  });
   Future<void> clearTokens();
 }
 
@@ -44,13 +47,16 @@ class RefreshTokenInterceptor extends Interceptor {
     required TokenStorageService tokenStorage,
     required TokenRefreshRepository tokenRefreshRepository,
     RefreshTokenConfig? config,
-  })  : _dio = dio,
-        _tokenStorage = tokenStorage,
-        _tokenRefreshRepository = tokenRefreshRepository,
-        _config = config ?? RefreshTokenConfig();
+  }) : _dio = dio,
+       _tokenStorage = tokenStorage,
+       _tokenRefreshRepository = tokenRefreshRepository,
+       _config = config ?? RefreshTokenConfig();
 
   @override
-  Future<void> onError(DioException err, ErrorInterceptorHandler handler) async {
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
     if (err.response?.statusCode == 401 && !_isRefreshing) {
       _isRefreshing = true;
       DPrint.info("🔄 Initiating token refresh due to 401 error");
@@ -64,11 +70,14 @@ class RefreshTokenInterceptor extends Interceptor {
           // Token refresh successful, retry the original request
           final options = err.requestOptions;
           final newAccessToken = await _tokenStorage.getAccessToken();
-          
+
           if (newAccessToken != null) {
-            options.headers[_config.tokenHeaderKey] = '${_config.tokenPrefix}$newAccessToken';
-            DPrint.info("🔄 Retrying request with new token for ${options.path}");
-            
+            options.headers[_config.tokenHeaderKey] =
+                '${_config.tokenPrefix}$newAccessToken';
+            DPrint.info(
+              "🔄 Retrying request with new token for ${options.path}",
+            );
+
             try {
               final response = await _dio.request(
                 options.path,
@@ -106,26 +115,27 @@ class RefreshTokenInterceptor extends Interceptor {
       // Queue the request if refresh is in progress
       final completer = Completer<void>();
       _pendingRequests.add(completer);
-      await completer.future.timeout(_config.maxRetryDelay, onTimeout: () {
-        DPrint.error("❌ Retry timeout for ${err.requestOptions.path}");
-        return handler.next(err);
-      });
-      
+      await completer.future.timeout(
+        _config.maxRetryDelay,
+        onTimeout: () {
+          DPrint.error("❌ Retry timeout for ${err.requestOptions.path}");
+          return handler.next(err);
+        },
+      );
+
       // Retry the request after refresh
       final options = err.requestOptions;
       final newAccessToken = await _tokenStorage.getAccessToken();
-      
+
       if (newAccessToken != null) {
-        options.headers[_config.tokenHeaderKey] = '${_config.tokenPrefix}$newAccessToken';
+        options.headers[_config.tokenHeaderKey] =
+            '${_config.tokenPrefix}$newAccessToken';
         try {
           final response = await _dio.request(
             options.path,
             data: options.data,
             queryParameters: options.queryParameters,
-            options: Options(
-              method: options.method,
-              headers: options.headers,
-            ),
+            options: Options(method: options.method, headers: options.headers),
           );
           return handler.resolve(response);
         } catch (retryError) {
@@ -141,14 +151,14 @@ class RefreshTokenInterceptor extends Interceptor {
   Future<Either<dynamic, dynamic>> _refreshToken() async {
     try {
       final refreshToken = await _tokenStorage.getRefreshToken();
-      
+
       if (refreshToken == null) {
         DPrint.error("❌ No refresh token available");
         return Left("No refresh token");
       }
 
       final result = await _tokenRefreshRepository.refreshToken(refreshToken);
-      
+
       return result.fold(
         (failure) {
           DPrint.error("❌ Refresh token failed: $failure");
@@ -158,7 +168,7 @@ class RefreshTokenInterceptor extends Interceptor {
           // Assuming success response contains accessToken and refreshToken
           final accessToken = success['accessToken'] ?? success.accessToken;
           final refreshToken = success['refreshToken'] ?? success.refreshToken;
-          
+
           if (accessToken != null && refreshToken != null) {
             await _tokenStorage.storeTokens(
               accessToken: accessToken,
