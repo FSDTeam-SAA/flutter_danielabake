@@ -14,9 +14,11 @@ class AppColors {
 
   static const Color hintText = primaryGray;
   static const Color iconColor = primaryBlack;
+  static const Color appBarIconColor = Color(0xFF7F3615);
+  static const Color appBarIconBG = Color(0xFFFCE3BB);
   static const Color iconBgColor = Color(0xFF545454);
   static const Color containerBgColor = Color(0xFF272727);
 
-  static const Color red = Color(0xFFE50202);
+  static const Color red = Color(0xFFFF988C);
   static const Color successGreen = Color(0xFF039B06);
 }
