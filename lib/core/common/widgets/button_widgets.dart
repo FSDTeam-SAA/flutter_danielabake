@@ -1,7 +1,6 @@
 import 'package:danielabake/core/base/base_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../theme/app_colors.dart';
 
@@ -70,7 +69,19 @@ class PrimaryButton extends StatelessWidget {
               height: height ?? 48,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: backgroundColor,
+                // color: backgroundColor,
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  transform: GradientRotation(178.12 * 3.1416 / 180),
+                  colors: [
+                    AppColors.primaryButtonDeep.withAlpha((0.7 * 255).toInt()),
+                    AppColors.primaryButtonBright.withAlpha(
+                      (0.7 * 255).toInt(),
+                    ),
+                  ],
+                  stops: [0.44, 0.88],
+                ),
                 borderRadius: BorderRadius.circular(borderRadius),
               ),
               child: isLoading.value
@@ -85,9 +96,9 @@ class PrimaryButton extends StatelessWidget {
                   : Text(
                       text,
                       style: TextStyle(
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.w600,
                         fontSize: 16,
-                        color: AppColors.primaryBlack,
+                        color: AppColors.primaryWhite,
                       ),
                     ),
             ),
@@ -120,11 +131,11 @@ class SecondaryButton extends StatelessWidget {
     this.tag,
     required this.text,
     this.width,
-    this.height,
-    this.borderColor = AppColors.primaryBlack,
+    this.height = 50,
+    this.borderColor = AppColors.primaryButtonBright,
     this.textColor = AppColors.primaryBlack,
     this.backgroundColor,
-    this.borderRadius = 12.0,
+    this.borderRadius = 48.0,
     this.borderWidth = 1.0,
   });
 
@@ -185,10 +196,10 @@ class SecondaryButton extends StatelessWidget {
                     )
                   : Text(
                       text,
-                      style: GoogleFonts.tenorSans(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        color: textColor,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: AppColors.primaryButtonBright,
                       ),
                     ),
             ),

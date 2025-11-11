@@ -12,9 +12,10 @@ class Images {
 
 class Videos {
   static const String _base = 'assets/videos';
-
+  final String awd = _base;
 }
 
 class Icons {
   static const String _base = 'assets/icons';
+  final String awd = _base;
 }
