@@ -6,7 +6,7 @@ import 'package:socket_io_client/socket_io_client.dart' as io;
 import 'package:get/get.dart';
 
 import '/core/network/services/auth_storage_service.dart';
-import '/core/utils/debug_print.dart';
+import 'package:flutx_core/core/debug_print.dart';
 import '/features/auth/screens/login_screen.dart';
 import 'api_client.dart';
 import 'constants/api_constants.dart'; // For token refresh

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:crypto/crypto.dart';
-import '/core/utils/debug_print.dart';
+import 'package:flutx_core/core/debug_print.dart';
 import '../constants/cache_constants.dart';
 import '../models/hive_cache_model.dart';
 

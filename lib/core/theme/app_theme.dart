@@ -4,20 +4,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppTheme {
-  static ThemeData get dark => ThemeData(
-    scaffoldBackgroundColor: AppColors.primaryBlack,
-    // primaryColor: AppColors.primaryWhite,
-    colorScheme: ColorScheme.dark(primary: AppColors.primaryWhite),
+  static ThemeData get light => ThemeData(
+    scaffoldBackgroundColor: AppColors.primaryBG,
+    primaryColor: AppColors.primaryButtonDeep,
+    colorScheme: ColorScheme.light(primary: AppColors.primaryButtonDeep),
 
-    textTheme: GoogleFonts.manropeTextTheme(ThemeData.dark().textTheme).apply(
+    textTheme: GoogleFonts.poppinsTextTheme(ThemeData.light().textTheme).apply(
       bodyColor: AppColors.primaryWhite,
       displayColor: AppColors.primaryWhite,
     ),
 
     appBarTheme: AppBarThemeData(
-      backgroundColor: AppColors.primaryBlack,
+      backgroundColor: AppColors.primaryBG,
       titleTextStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 24),
-      centerTitle: false,
     ),
   );
 }

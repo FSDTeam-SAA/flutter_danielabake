@@ -312,6 +312,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutx_core:
+    dependency: "direct main"
+    description:
+      name: flutx_core
+      sha256: "2238c3b415c9fe0b3f32c752d524d1d7ad94f438ecebaa879cbceb17aa0d71a5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1+1"
   get:
     dependency: "direct main"
     description:
