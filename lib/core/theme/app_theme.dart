@@ -15,6 +15,7 @@ class AppTheme {
     ),
 
     appBarTheme: AppBarThemeData(
+      iconTheme: IconThemeData(color: AppColors.appBarIconColor),
       backgroundColor: AppColors.primaryBG,
       titleTextStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 24),
     ),

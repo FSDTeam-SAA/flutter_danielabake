@@ -20,7 +20,11 @@ class AuthController extends BaseController {
     }, (success) {});
   }
 
-  Future<void> register() async {
+  Future<void> signUp({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
     final request = LoginRequestModel(
       email: "noyonbdc787@gmail.com",
       password: "123456",
@@ -29,4 +33,20 @@ class AuthController extends BaseController {
 
     response.fold((fail) {}, (success) {});
   }
+
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final request = LoginRequestModel(
+      email: "noyonbdc787@gmail.com",
+      password: "123456",
+    );
+    final response = await _authRepo.login(request);
+
+    response.fold((fail) {}, (success) {});
+  }
+
+  // In auth_controller.dart
+  Future<void> updateProfile({required String name, String? photoUrl}) async {}
 }

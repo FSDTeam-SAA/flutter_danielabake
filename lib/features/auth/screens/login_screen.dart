@@ -2,9 +2,9 @@ import 'package:danielabake/core/common/widgets/app_logo.dart';
 import 'package:danielabake/core/common/widgets/app_scaffold.dart';
 import 'package:danielabake/core/common/widgets/button_widgets.dart';
 import 'package:danielabake/core/extensions/input_decoration_extensions.dart';
-import 'package:danielabake/core/network/socket_client.dart';
 
 import 'package:danielabake/features/auth/controller/auth_controller.dart';
+import 'package:danielabake/features/auth/screens/signup_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx_core/flutx_core.dart';
@@ -44,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     await _authCtrl.login();
+    // Get.to(() => ChangePasswordScreen());
   }
 
   @override
@@ -64,11 +65,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       AppLogo(height: 80),
 
                       Gap(h: 30),
+                      Text(
+                        "Login to your account",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Gap(h: 30),
 
                       /// [Text Field] Email
                       TextFormField(
-                        // controller: _emailController,
-                        // focusNode: _emailFocus,
+                        controller: _emailController,
+                        focusNode: _emailFocus,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         style: const TextStyle(
@@ -79,8 +88,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintText: "Email",
                         ),
                         validator: Validators.email,
-                        // onFieldSubmitted: (_) =>
-                        //     FocusScope.of(context).requestFocus(_passwordFocus),
+                        onFieldSubmitted: (_) =>
+                            FocusScope.of(context).requestFocus(_passwordFocus),
                         autofillHints: const [AutofillHints.email],
                       ),
                       Gap.h12,
@@ -168,7 +177,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: AppColors.primaryButtonBright,
                                 ),
                                 recognizer: TapGestureRecognizer()
-                                  ..onTap = () {},
+                                  ..onTap = () {
+                                    Get.to(
+                                      () => (SignUpScreen()),
+                                      transition: Transition.rightToLeft,
+                                    );
+                                  },
                               ),
                             ],
                           ),
