@@ -1,5 +1,6 @@
 import 'package:danielabake/core/theme/app_theme.dart';
 import 'package:danielabake/features/auth/screens/login_screen.dart';
+import 'package:danielabake/features/splash_screen/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: AppTheme.light,
-      home: LoginScreen(),
+      home: SplashScreen(),
     );
   }
 }

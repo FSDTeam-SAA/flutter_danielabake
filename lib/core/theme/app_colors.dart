@@ -4,7 +4,7 @@ class AppColors {
   static const Color primaryBG = Color(0xFFFFF1DB);
 
   // Button gradient Colors
-  static const Color primaryButtonBright = Color(0xFF237EF4);
+  static const Color primaryButtonBright = Color(0xFF1753FF);
   static const Color primaryButtonDeep = Color(0xFF1153FA);
 
   static const Color primaryBlack = Color(0xFF000000);

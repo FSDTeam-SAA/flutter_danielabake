@@ -4,7 +4,10 @@ import 'package:danielabake/core/common/widgets/button_widgets.dart';
 import 'package:danielabake/core/extensions/input_decoration_extensions.dart';
 
 import 'package:danielabake/features/auth/controller/auth_controller.dart';
+import 'package:danielabake/features/auth/screens/forgot_password_screen.dart';
 import 'package:danielabake/features/auth/screens/signup_screen.dart';
+import 'package:danielabake/features/home/screens/home_screen.dart';
+import 'package:danielabake/navigation_menu.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx_core/flutx_core.dart';
@@ -44,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     await _authCtrl.login();
-    // Get.to(() => ChangePasswordScreen());
+    Get.to(() => NavigationMenu());
   }
 
   @override
@@ -135,6 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               return Checkbox(
                                 side: BorderSide(
                                   color: AppColors.primaryButtonBright,
+                                  width: 2
                                 ),
                                 value: remember,
                                 onChanged: (value) {
@@ -146,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Text("Remember me", style: TextStyle(fontSize: 14)),
                           Spacer(),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {Get.to(() => ForgotPasswordScreen());},
                             child: Text(
                               "Forgot password?",
                               style: TextStyle(
