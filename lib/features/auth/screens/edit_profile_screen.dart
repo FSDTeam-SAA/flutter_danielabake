@@ -40,7 +40,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> _saveProfile() async {
     if (!_formKey.currentState!.validate()) return;
 
-    await _authCtrl.updateProfile(name: _nameController.text.trim());
+    //await _authCtrl.updateProfile(name: _nameController.text.trim());
     Get.back();
     Get.snackbar(
       "Success",

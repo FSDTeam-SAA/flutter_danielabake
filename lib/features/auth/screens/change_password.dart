@@ -45,10 +45,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
-    await _authCtrl.changePassword(
-      currentPassword: _currentCtrl.text,
-      newPassword: _newCtrl.text,
-    );
+    // await _authCtrl.changePassword(
+    //   currentPassword: _currentCtrl.text,
+    //   newPassword: _newCtrl.text,
+    // );
   }
 
   @override

@@ -14,6 +14,7 @@ class PrimaryButton extends StatelessWidget {
   final Color backgroundColor;
   final Color textColor;
   final double borderRadius;
+
   const PrimaryButton({
     super.key,
     this.onApiPressed,
@@ -70,17 +71,13 @@ class PrimaryButton extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 // color: backgroundColor,
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0x99237EF4), // 60% opacity
+                    Color(0x991153FA), // 60% opacity
+                  ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  transform: GradientRotation(178.12 * 3.1416 / 180),
-                  colors: [
-                    AppColors.primaryButtonDeep.withAlpha((0.7 * 255).toInt()),
-                    AppColors.primaryButtonBright.withAlpha(
-                      (0.7 * 255).toInt(),
-                    ),
-                  ],
-                  stops: [0.44, 0.88],
                 ),
                 borderRadius: BorderRadius.circular(borderRadius),
               ),

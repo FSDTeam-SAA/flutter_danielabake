@@ -57,11 +57,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
 
     // Pass data to AuthController (you can extend AuthController to handle signup)
-    await _authCtrl.signUp(
-      name: _nameController.text.trim(),
-      email: _emailController.text.trim(),
-      password: _passwordController.text,
-    );
+
+    await _authCtrl.register(_nameController.text.trim(), _emailController.text.trim(), _passwordController.text);
   }
 
   @override

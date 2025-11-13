@@ -1,6 +1,6 @@
 // lib/core/network/services/auth_check_service.dart
 
-import '../../../features/auth/models/response/auth_response_model.dart';
+import '../../../features/auth/models/response/login_response_model.dart';
 import '/features/auth/repositories/auth_repository.dart';
 import '/core/base/base_controller.dart';
 import 'package:flutx_core/core/debug_print.dart';
@@ -44,7 +44,7 @@ class AuthenticateCheckService extends BaseController {
     return isAuth;
   }
 
-  Future<void> _storeNewTokens(AuthResponseModel success) async {
+  Future<void> _storeNewTokens(LoginResponseModel success) async {
     try {
       if (success.accessToken != null && success.refreshToken != null) {
         await _authStorageService.storeAccessToken(

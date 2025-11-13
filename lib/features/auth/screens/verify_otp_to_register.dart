@@ -1,7 +1,7 @@
 import 'package:danielabake/features/auth/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../core/common/widgets/elevated_button.dart';
+import '../../../core/common/widgets/button_widgets.dart';
 import '../widgets/pincode.dart';
 
 class OtpVerificationToCompleteRegister extends StatefulWidget {
@@ -16,6 +16,8 @@ class OtpVerificationToCompleteRegister extends StatefulWidget {
 class _OtpVerificationToCompleteRegisterState
     extends State<OtpVerificationToCompleteRegister> {
   final TextEditingController otpController = TextEditingController();
+
+  _submit(){}
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +54,9 @@ class _OtpVerificationToCompleteRegisterState
               SizedBox(height: 24),
 
               PrimaryButton(
-                onTap: () {
-                 Get.to(() => LoginScreen());
-                },
-                label: 'Verify OTP',
+                onApiPressed: _submit(),
                 width: double.infinity,
-                height: 50,
+                height: 50, text: 'Verify OTP',
               ),
             ],
           ),
