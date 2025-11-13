@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutx_core/flutx_core.dart';
 import 'package:get/get.dart';
 import '../../../core/theme/app_colors.dart';
+import 'login_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -233,7 +234,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    Get.back();
+                                    Get.to(() => LoginScreen);
                                   },
                               ),
                             ],

@@ -14,6 +14,7 @@ import '../models/request/create_new_password_request_model.dart';
 import '../models/request/forgot_password_request_model.dart';
 import '../models/request/verify_otp_request_model.dart';
 import '../models/response/forgot_password_response_model.dart';
+import '../models/response/refresh_token_response_model.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final ApiClient _apiClient;

@@ -5,15 +5,16 @@ import 'package:danielabake/features/auth/screens/login_screen.dart';
 import 'package:danielabake/features/auth/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import '../../../core/common/constants/app_images.dart';
 import '../../../core/common/widgets/elevated_button.dart' show PrimaryButton, SecondaryButton;
+import '../controller/navigation_controller.dart';
+
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -26,17 +27,6 @@ class SplashScreen extends StatelessWidget {
               right: 0,
               child: Image.asset(Images.background),
             ),
-
-            //Background subtle pattern (optional)
-            // Positioned.fill(
-            //   child: Opacity(
-            //     opacity: 0.05,
-            //     child: Image.asset(
-            //       AppImages.appLogo, // optional repeating bread bg
-            //       fit: BoxFit.cover,
-            //     ),
-            //   ),
-            // ),
             Positioned(
               top: 60,
               left: 0,
@@ -51,31 +41,29 @@ class SplashScreen extends StatelessWidget {
                 ],
               ),
             ),
-            //Center Images (diamond style)
             Positioned(
               top: size.height * 0.32,
               left: -70,
               child: _buildDiamondImage(Images.cookie1, 160),
             ),
-
             Positioned(
               top: size.height * 0.38,
               left: 120,
               child: _buildDiamondImage(Images.cookie2, 199),
             ),
-
             Positioned(
               top: size.height * 0.32,
               right: -70,
               child: _buildDiamondImage(Images.cookie3, 160),
             ),
 
+            /// These buttons will only be visible if user is not logged in
             Positioned(
               bottom: 120,
               left: 16,
               right: 16,
               child: PrimaryButton(
-                onTap: () {Get.to(SignUpScreen());},
+                onTap: () => Get.to(() => SignUpScreen()),
                 label: 'Create Account',
                 width: double.infinity,
                 height: 50,
@@ -86,7 +74,7 @@ class SplashScreen extends StatelessWidget {
               left: 16,
               right: 16,
               child: SecondaryButton(
-                onTap: () {Get.to(() => LoginScreen());},
+                onTap: () => Get.to(() => LoginScreen()),
                 label: 'Login',
                 width: double.infinity,
                 height: 50,
@@ -101,15 +89,15 @@ class SplashScreen extends StatelessWidget {
   // Helper Widget to make images diamond-shaped
   Widget _buildDiamondImage(String imagePath, double size) {
     return Transform.rotate(
-      angle: pi / 4, // rotate the container (square rotated)
+      angle: pi / 4,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16),
-        child: Container(
+        child: SizedBox(
           width: size,
           height: size,
           child: Image.asset(
             imagePath,
-            fit: BoxFit.cover, // image fills the square
+            fit: BoxFit.cover,
           ),
         ),
       ),

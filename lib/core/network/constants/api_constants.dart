@@ -49,6 +49,6 @@ class AuthEndpoints {
   final String resetPassword = '$_base/reset-password';
   final String register = '$_base/register';
 
-  final String refreshToken = '$_base/refresh-token';
+  final String refreshToken = '$_base/refresh';
 }
 

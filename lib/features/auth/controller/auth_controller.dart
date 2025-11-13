@@ -1,4 +1,5 @@
 import 'package:danielabake/core/base/base_controller.dart';
+import 'package:danielabake/core/network/models/refresh_token_request_model.dart';
 import 'package:danielabake/features/auth/controller/remember_me_controller.dart';
 import 'package:danielabake/features/auth/models/request/create_new_password_request_model.dart';
 import 'package:danielabake/features/auth/models/request/forgot_password_request_model.dart';
@@ -10,17 +11,15 @@ import 'package:danielabake/navigation_menu.dart';
 import 'package:flutx_core/core/debug_print.dart';
 import 'package:danielabake/features/auth/repositories/auth_repository.dart';
 import 'package:get/get.dart';
-
 import '../../../core/network/services/auth_storage_service.dart';
 import '../../../core/network/services/secure_store_services.dart';
-import '../../home/screens/home_screen.dart';
 import '../models/request/login_request_model.dart';
 import '../models/request/register_request_model.dart';
 import '../screens/login_screen.dart';
-import '../screens/verify_otp_to_register.dart';
 
 class AuthController extends BaseController {
   final _authRepo = Get.find<AuthRepository>();
+  bool _isSuccess = false;
 
   // //final AuthRepository _authRepository;
   final AuthStorageService _authStorageService = AuthStorageService();
@@ -177,21 +176,18 @@ class AuthController extends BaseController {
   //   DPrint.log("Got refresh token: $refreshToken");
   //   final request = RefreshTokenRequestModel(refreshToken: refreshToken);
   //
-  //   final result = await _authRepository.refreshToken(request);
+  //   final result = await _authRepo.refreshToken(request);
   //
   //   final navi = result.fold(
   //         (fail) {
   //       DPrint.log("Refresh token failed: ${fail.message}");
-  //       setLoading(false);
   //       return _isSuccess = false;
   //     },
   //         (success) async {
   //       DPrint.log("Refresh token success: ${success.message}");
-  //       await _authStorageService.storeAccessToken(success.data.accessToken);
-  //       await _authStorageService.storeRefreshToken(success.data.refreshToken);
-  //       // _authStorageService.clearAuthData();
-  //       setLoading(false);
-  //       Get.to(() => JoinLeagueScreen(), transition: Transition.rightToLeft);
+  //       await _authStorageService.storeAccessToken(accessToken: success.data.accessToken);
+  //       //await _authStorageService.storeRefreshToken(refreshToken: success.data.refreshToken);
+  //       //await _authStorageService.storeRefreshToken(success.data.refreshToken);
   //       return _isSuccess = true;
   //     },
   //   );

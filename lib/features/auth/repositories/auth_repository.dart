@@ -8,6 +8,7 @@ import 'package:danielabake/features/auth/models/response/register_response_mode
 
 import '../models/request/register_request_model.dart';
 import '../models/response/login_response_model.dart';
+import '../models/response/refresh_token_response_model.dart';
 import '/core/network/models/refresh_token_request_model.dart';
 
 abstract class AuthRepository {
@@ -19,7 +20,5 @@ abstract class AuthRepository {
   NetworkResult<void> verifyOtp(VerifyOtpRequestModel request);
   NetworkResult<void> createNewPassword(CreateNewPasswordRequestModel request);
 
-  NetworkResult<LoginResponseModel> refreshToken(
-    RefreshTokenRequestModel request,
-  );
+  NetworkResult<LoginResponseModel> refreshToken(RefreshTokenRequestModel request);
 }
