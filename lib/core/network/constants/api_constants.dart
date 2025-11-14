@@ -36,6 +36,7 @@ class ApiConstants {
 
   /// [Endpoint Groups
   static AuthEndpoints get auth => AuthEndpoints();
+  static ProfileEndpoints get profile => ProfileEndpoints();
 
 }
 
@@ -50,5 +51,10 @@ class AuthEndpoints {
   final String register = '$_base/register';
 
   final String refreshToken = '$_base/refresh';
+}
+
+class ProfileEndpoints {
+  static const String _base = '${ApiConstants.baseUrl}/profile';
+  String fetchProfile(String userId) => '$_base/$userId';
 }
 
