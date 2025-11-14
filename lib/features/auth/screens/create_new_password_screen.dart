@@ -69,7 +69,8 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                     focusNode: _newPasswordFocus,
                     cursorColor: Colors.black,
                     obscureText: obscure,
-                    textInputAction: TextInputAction.done,
+                    textInputAction: TextInputAction.next,
+
                     decoration: context.primaryInputDecoration().copyWith(
                       hintText: 'New Password',
                     ),

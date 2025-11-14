@@ -1,5 +1,8 @@
 import 'package:danielabake/core/common/widgets/elevated_button.dart';
+import 'package:danielabake/features/auth/controller/auth_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'menu_tile.dart';
 import 'profile_info_box.dart';
 
@@ -21,6 +24,8 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _authController = Get.find<AuthController>();
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -37,7 +42,6 @@ class ProfileCard extends StatelessWidget {
           // top row
           Container(
             decoration: BoxDecoration(color: Color(0x2EFFB972),borderRadius: BorderRadius.circular(8)),
-            
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -105,8 +109,31 @@ class ProfileCard extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+
+          SizedBox(height: 20,),
+
+          Container(
+            decoration: BoxDecoration(color: Color(0x2EFFB972),borderRadius: BorderRadius.circular(8)),
+            child: ListTile(
+              leading: Container(decoration:BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: Color(0xFFFFEFD5)
+              ), child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Icon(Icons.logout, color: Colors.brown[700]),
+              )),
+              title: Text(
+                "Logout",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              trailing: IconButton(onPressed: (){_authController.logout();}, icon: Icon(Icons.arrow_forward_ios, size: 16,
+                color: Colors.black54,),),
+            ),
           )
-          // info boxes row
 
         ],
       ),

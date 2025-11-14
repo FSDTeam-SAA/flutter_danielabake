@@ -1,7 +1,7 @@
 class RefreshTokenRequestModel {
-  final String refreshToken;
+  final String? refreshToken;
 
-  RefreshTokenRequestModel({required this.refreshToken});
+  RefreshTokenRequestModel({this.refreshToken});
 
   Map<String, dynamic> toJson() {
     return {"refreshToken": refreshToken};

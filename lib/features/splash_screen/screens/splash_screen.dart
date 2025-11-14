@@ -6,7 +6,6 @@ import 'package:danielabake/features/auth/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/common/widgets/elevated_button.dart' show PrimaryButton, SecondaryButton;
-import '../controller/navigation_controller.dart';
 
 
 class SplashScreen extends StatelessWidget {

@@ -74,10 +74,10 @@ class AuthController extends BaseController {
   // Login
 
   Future<void> login(
-    RememberMeController? rememberMeController, {
-    required String email,
-    required String password,
-  }) async {
+      RememberMeController? rememberMeController, {
+        required String email,
+        required String password,
+      }) async {
     final request = LoginRequestModel(email: email, password: password);
 
     final result = await _authRepo.login(request);
@@ -85,28 +85,34 @@ class AuthController extends BaseController {
     DPrint.log("Login Response ${result.isRight()}");
 
     result.fold(
-      (fail) {
+          (fail) {
         setError(fail.message);
         setLoading(false);
       },
-      (success) async {
+          (success) async {
+        // Extract user data
         final user = success.data.user;
-        if (user.role == 'user') {
-          await _authStorageService.storeAuthData(
-            accessToken: success.data.accessToken,
-            refreshToken: success.data.refreshToken,
-            userId: success.data.user.id,
-          );
-          if (rememberMeController!.rememberMe.value) {
-            final secureStore = SecureStoreServices();
-            secureStore.storeData('email', email);
-            secureStore.storeData('password', password);
-          }
-          Get.to(() => NavigationMenu());
+
+        // Store access token and refresh token for ANY user
+        await _authStorageService.storeAuthData(
+          accessToken: success.data.accessToken,
+          refreshToken: success.data.refreshToken,
+          userId: user.id,
+        );
+
+        // If Remember Me is ON → save email + password
+        if (rememberMeController?.rememberMe.value == true) {
+          final secureStore = SecureStoreServices();
+          secureStore.storeData('email', email);
+          secureStore.storeData('password', password);
         }
+
+        // Navigate to home screen
+        Get.to(() => NavigationMenu());
       },
     );
   }
+
 
   //
   Future forgotPass(String email) async {
@@ -164,43 +170,39 @@ class AuthController extends BaseController {
         DPrint.log(
           "New Password set successfully result : ${success.message}",
         );
-        Get.to(LoginScreen());
+        Get.offAll(LoginScreen());
       },
     );
   }
+
   //
-  // Future refreshToken() async {
-  //   setLoading(true);
+  Future refreshToken() async {
+    setLoading(true);
+
+    final refreshToken = await _authStorageService.getRefreshToken();
+    DPrint.log("Got refresh token: $refreshToken");
+    final request = RefreshTokenRequestModel(refreshToken: refreshToken);
+
+    final result = await _authRepo.refreshToken(request);
+
+    final navi = result.fold(
+          (fail) {
+        DPrint.log("Refresh token failed: ${fail.message}");
+        return _isSuccess = false;
+      },
+          (success) async {
+        DPrint.log("Refresh token success: ${success.message}");
+        await _authStorageService.storeAccessToken(accessToken: success.data.accessToken);
+        await _authStorageService.storeRefreshToken(refreshToken: success.data.refreshToken);
+        //await _authStorageService.storeRefreshToken(success.data.refreshToken);
+        return _isSuccess = true;
+      },
+    );
+    return navi;
+  }
   //
-  //   final refreshToken = await _authStorageService.getRefreshToken();
-  //   DPrint.log("Got refresh token: $refreshToken");
-  //   final request = RefreshTokenRequestModel(refreshToken: refreshToken);
-  //
-  //   final result = await _authRepo.refreshToken(request);
-  //
-  //   final navi = result.fold(
-  //         (fail) {
-  //       DPrint.log("Refresh token failed: ${fail.message}");
-  //       return _isSuccess = false;
-  //     },
-  //         (success) async {
-  //       DPrint.log("Refresh token success: ${success.message}");
-  //       await _authStorageService.storeAccessToken(accessToken: success.data.accessToken);
-  //       //await _authStorageService.storeRefreshToken(refreshToken: success.data.refreshToken);
-  //       //await _authStorageService.storeRefreshToken(success.data.refreshToken);
-  //       return _isSuccess = true;
-  //     },
-  //   );
-  //   return navi;
-  // }
-  //
-  // Future<void> logout() async {
-  //   await _authStorageService.clearAuthData();
-  //   final secureStore = SecureStoreServices();
-  //   await secureStore.deleteData('previewConfirmed'); // or storeData('previewConfirmed', 'false');
-  //   // await secureStore.deleteData('email');
-  //   // await secureStore.deleteData('password');
-  //
-  //   Get.offAll(() => LoginScreen());
-  // }
+  Future<void> logout() async {
+    await _authStorageService.clearAuthData();
+    Get.offAll(() => LoginScreen());
+  }
 }

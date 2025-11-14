@@ -71,4 +71,14 @@ class AuthRepositoryImpl implements AuthRepository {
       fromJsonT: (json) => LoginResponseModel.fromJson(json),
     );
   }
+
+  @override
+  NetworkResult<RefreshTokenResponseModel> refreshTOken(
+      RefreshTokenRequestModel request,) {
+    return _apiClient.post(
+      endpoint: ApiConstants.auth.refreshToken,
+      data: request.toJson(),
+      fromJsonT: (json) => RefreshTokenResponseModel.fromJson(json),
+    );
+  }
 }

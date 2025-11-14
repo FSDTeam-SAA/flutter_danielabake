@@ -1,10 +1,10 @@
 class ApiConstants {
   /// [Base Configuration]
-  // static const String baseDomain = 'http://10.10.5.48:5001'; // office pc
+  static const String baseDomain = 'http://10.10.5.33:5001'; // eshita
   //static const String baseDomain = 'https://api.azlotv.com'; // Publish
   // static const String baseDomain = 'http://18.116.214.151'; /// [AWS]
   // static const String baseDomain = 'http://192.168.0.218:8000';
-  static const String baseDomain = 'http://192.168.0.106:5001';///eshitas laptop
+  //static const String baseDomain = 'http://192.168.0.106:5001';///eshitas laptop
   static const String baseUrl = '$baseDomain/api/v1';
 
   /// Dynamically generated WebSocket URL based on baseDomain

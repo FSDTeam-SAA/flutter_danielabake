@@ -1,7 +1,7 @@
 class LoginResponseModel {
   final String accessToken;
   final String refreshToken;
-  final User user;
+  final UserModel user;
 
   LoginResponseModel({
     required this.accessToken,
@@ -11,9 +11,9 @@ class LoginResponseModel {
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
     return LoginResponseModel(
-      accessToken: json['accessToken'],
-      refreshToken: json['refreshToken'],
-      user: User.fromJson(json['user']),
+      accessToken: json['accessToken'] ?? '',
+      refreshToken: json['refreshToken'] ?? '',
+      user: UserModel.fromJson(json['user'] ?? {}),
     );
   }
 
@@ -26,24 +26,24 @@ class LoginResponseModel {
   }
 }
 
-class User {
+class UserModel {
   final String id;
   final String name;
   final String email;
-  final String role;
+  final String? role;
 
-  User({
+  UserModel({
     required this.id,
     required this.name,
     required this.email,
-    required this.role,
+    this.role,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      email: json['email'] ?? '',
       role: json['role'],
     );
   }
