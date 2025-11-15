@@ -71,10 +71,10 @@ class ProfileCard extends StatelessWidget {
                   SizedBox(height: 20,),
 
                   Row(
-                    children: const [
-                      ProfileInfoBox(title: 'Orders', value: '45'),
-                      SizedBox(width: 16),
-                      ProfileInfoBox(title: 'Favorites', value: '12'),
+                    children: [
+                      ProfileInfoBox(title: 'Orders', value: orders),
+                      const SizedBox(width: 16),
+                      ProfileInfoBox(title: 'Favorites', value: favorites),
                     ],
                   ),
                 ],
