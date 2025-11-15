@@ -32,7 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
           return ProfileCard(
             name: user.fullName,
-            imagePath: user.avatar.url,
+            imagePath: user.avatarUrl,
             orders: user.totalOrders.toString(),
             favorites: user.totalFavorites.toString(),
             onEdit: () {

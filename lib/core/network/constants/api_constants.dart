@@ -49,6 +49,7 @@ class AuthEndpoints {
   final String verifyOtp = '$_base/verify-otp';
   final String resetPassword = '$_base/reset-password';
   final String register = '$_base/register';
+  final String updatePassword = '$_base/change-password';
 
   final String refreshToken = '$_base/refresh';
 }
@@ -56,5 +57,6 @@ class AuthEndpoints {
 class ProfileEndpoints {
   static const String _base = '${ApiConstants.baseUrl}/profile';
   String fetchProfile(String userId) => '$_base/$userId';
+  String updateProfile(String userId) => '$_base/$userId';
 }
 

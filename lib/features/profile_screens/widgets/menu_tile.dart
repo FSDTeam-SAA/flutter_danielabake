@@ -1,14 +1,17 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Icons;
+
+import '../../../core/constants/assets_const.dart';
+import '../../../core/utils/app_svg.dart';
 
 class MenuTile extends StatelessWidget {
-  final IconData icon;
+  final String image;
   final String title;
   final String? subtitle;
   final VoidCallback onTap;
 
   const MenuTile({
     super.key,
-    required this.icon,
+    required this.image,
     required this.title,
     this.subtitle,
     required this.onTap,
@@ -28,7 +31,7 @@ class MenuTile extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Icon(icon, color: Colors.brown[700]),
+                child: Container( width: 20, height: 20, child: AppSvg(asset: image)),
               ),
             ),
             title: Text(
@@ -42,12 +45,11 @@ class MenuTile extends StatelessWidget {
                 ? Text(subtitle!, style: const TextStyle(color: Colors.black54))
                 : null,
 
-            trailing: const Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: Colors.black54,
+            trailing: IconButton(
+              onPressed: onTap,
+              icon: AppSvg(asset: Images.arrow),
             ),
-            onTap: onTap,
+
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),

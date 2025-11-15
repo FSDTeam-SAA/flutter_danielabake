@@ -6,8 +6,10 @@ import 'package:danielabake/core/constants/assets_const.dart';
 import 'package:danielabake/core/utils/app_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx_core/core/theme/gap.dart';
+import 'package:get/get.dart';
 
 import '../../../core/common/widgets/cart.dart';
+import '../../auth/controller/auth_controller.dart';
 import '../widgets/grid_layout.dart';
 import '../widgets/popular_items.dart';
 
@@ -19,6 +21,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _authController = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,6 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
+
+              ElevatedButton(onPressed: (){_authController.logout();}, child: Text('Logout'))
             ],
           ),
         ),

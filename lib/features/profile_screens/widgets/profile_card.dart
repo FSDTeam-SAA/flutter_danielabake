@@ -1,8 +1,13 @@
 import 'package:danielabake/core/common/widgets/elevated_button.dart';
+import 'package:danielabake/core/constants/assets_const.dart';
 import 'package:danielabake/features/auth/controller/auth_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:danielabake/features/profile_screens/screens/change_password_screen.dart';
+import 'package:danielabake/features/profile_screens/screens/my_orders_screen.dart';
+import 'package:flutter/material.dart' hide Icons;
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import '../../../core/utils/app_svg.dart';
+import '../screens/edit_profile_screen.dart';
 import 'menu_tile.dart';
 import 'profile_info_box.dart';
 
@@ -48,9 +53,14 @@ class ProfileCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: 24,
-                        backgroundImage: AssetImage(imagePath),
+                      SizedBox(
+                        width: 64,
+                        height: 64,
+                        child: CircleAvatar(
+                          backgroundImage: imagePath.isNotEmpty
+                              ? NetworkImage(imagePath)
+                              : const AssetImage(Images.profile1) as ImageProvider,
+                        ),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
@@ -62,7 +72,7 @@ class ProfileCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      PrimaryButton(onTap: (){}, label: 'Edit', width: 56, height: 30),
+                      PrimaryButton(onTap: (){Get.to(() => EditProfileScreen());}, label: 'Edit', width: 56, height: 30),
                     ],
                   ),
                   SizedBox(height: 20,),
@@ -90,22 +100,22 @@ class ProfileCard extends StatelessWidget {
             child: Column(
               children: [
                 MenuTile(
-                  icon: Icons.receipt_long,
+                  image: Images.orders,
                   title: 'My Orders',
                   subtitle: 'View past & ongoing orders',
-                  onTap: () {},
+                  onTap: () {Get.to(() => MyOrdersScreen());},
                 ),
                 MenuTile(
-                  icon: Icons.favorite_border,
+                  image: Images.favorite,
                   title: 'Favorites',
                   subtitle: 'See your saved dishes',
                   onTap: () {},
                 ),
                 MenuTile(
-                  icon: Icons.settings,
+                  image: Images.settings,
                   title: 'Settings',
                   subtitle: 'Change your password',
-                  onTap: () {},
+                  onTap: () {Get.to(() => ChangePasswordScreen());},
                 ),
               ],
             ),
@@ -114,24 +124,32 @@ class ProfileCard extends StatelessWidget {
           SizedBox(height: 20,),
 
           Container(
-            decoration: BoxDecoration(color: Color(0x2EFFB972),borderRadius: BorderRadius.circular(8)),
+            decoration: BoxDecoration(
+              color: Color(0x2EFFB972),
+              borderRadius: BorderRadius.circular(8),
+            ),
             child: ListTile(
-              leading: Container(decoration:BoxDecoration(
+              leading: Container(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
-                  color: Color(0xFFFFEFD5)
-              ), child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Icon(Icons.logout, color: Colors.brown[700]),
-              )),
-              title: Text(
+                  color: Color(0xFFFFEFD5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: AppSvg(asset: Images.logout),
+                ),
+              ),
+              title: const Text(
                 "Logout",
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
                 ),
               ),
-              trailing: IconButton(onPressed: (){_authController.logout();}, icon: Icon(Icons.arrow_forward_ios, size: 16,
-                color: Colors.black54,),),
+              trailing: IconButton(
+                onPressed: () => _authController.logout(),
+                icon: AppSvg(asset: Images.arrow),
+              ),
             ),
           )
 

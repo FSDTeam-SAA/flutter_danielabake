@@ -1,8 +1,12 @@
 import 'package:danielabake/features/profile_screens/models/response/get_profile_response_model.dart';
+import 'package:danielabake/features/profile_screens/models/response/update_profile_response_model.dart';
 import 'package:danielabake/features/profile_screens/repositories/profile_repository.dart';
+import 'package:dio/dio.dart';
+
 import '../../../../core/network/api_client.dart';
 import '../../../../core/network/constants/api_constants.dart';
 import '../../../../core/network/network_result.dart';
+import '../models/request/current_password_update_request_model.dart';
 
 
 
@@ -22,24 +26,23 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
 
 
-  // @override
-  // NetworkResult<UserResponse> updatePersonalInfo(FormData request) {
-  //   return _apiClient.patch(
-  //       ApiConstants.user.updateProfile,
-  //       formData: request,
-  //       fromJsonT: (json) => UserResponse.fromJson(json),
-  //       isFormData: true
-  //   );
-  // }
+  @override
+  NetworkResult<UpdateProfileResponseModel> updatePersonalInfo(FormData formData, String userId){
+    return _apiClient.post(
+        endpoint: ApiConstants.profile.updateProfile(userId),
+        formData: formData,
+        fromJsonT: (json) => UpdateProfileResponseModel.fromJson(json),
+    );
+  }
   //
-  // @override
-  // NetworkResult<void> changePass(ChangePasswordRequest request) {
-  //   return _apiClient.post(
-  //     ApiConstants.auth.changePassword,
-  //     data: request.toJson(),
-  //     fromJsonT: (json) => [],
-  //   );
-  // }
+  @override
+  NetworkResult<void> changePass(UpdatePasswordRequestModel request){
+    return _apiClient.post(
+      endpoint:ApiConstants.auth.updatePassword,
+      data: request.toJson(),
+      fromJsonT: (json) => [],
+    );
+  }
   //
   // @override
   // NetworkResult<UserResponse> uploadPhoto(FormData request) {
