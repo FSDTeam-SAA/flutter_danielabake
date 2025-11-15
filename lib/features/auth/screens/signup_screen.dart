@@ -222,19 +222,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: RichText(
                           text: TextSpan(
                             text: 'Already have an account? ',
-                            style: const TextStyle(
-                              color: AppColors.primaryBlack,
+                            style: TextStyle(
+                                color: Colors.black, // normal text color
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400
                             ),
                             children: [
                               TextSpan(
                                 text: 'Login',
-                                style: const TextStyle(
-                                  color: AppColors.primaryButtonBright,
-                                  fontWeight: FontWeight.bold,
+                                style: TextStyle(
+                                    color: Color(0xFF1753FF), // login text color
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14
                                 ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    Get.to(() => LoginScreen);
+                                    Get.to(() => LoginScreen());
                                   },
                               ),
                             ],
