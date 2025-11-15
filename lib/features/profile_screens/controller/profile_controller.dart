@@ -9,14 +9,9 @@ import '../../../core/network/services/auth_storage_service.dart';
 import '../repositories/profile_repository.dart';
 
 class ProfileController extends BaseController {
-  final ProfileRepository _profileRepository;
-  var isSkipLoading = false.obs;
-  var isContinueLoading = false.obs;
-  final MultiFormDataManager _multiFormDataManager = MultiFormDataManager();
-  final AuthStorageService _authStorageService;
+  final  _profileRepository = Get.find<ProfileRepository>();
+  final AuthStorageService _authStorageService = AuthStorageService();
 
-
-  ProfileController(this._profileRepository, this._authStorageService);
 
   final Rxn<GetProfileResponseModel> userInfo = Rxn<
       GetProfileResponseModel>();

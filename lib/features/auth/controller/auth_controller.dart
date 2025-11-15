@@ -21,7 +21,6 @@ class AuthController extends BaseController {
   final _authRepo = Get.find<AuthRepository>();
   bool _isSuccess = false;
 
-  // //final AuthRepository _authRepository;
   final AuthStorageService _authStorageService = AuthStorageService();
 
   //
