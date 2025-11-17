@@ -28,6 +28,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   File? _selectedImage;
 
+  String? imageUrl;
+
   final PickImageController _pickImageController = PickImageController();
 
   void _pickImage() async {
@@ -39,28 +41,29 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
-  // @override
-  // void initState() {
-  //
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    setInitial();
+    super.initState();
+  }
 
-  // setInitial(){
-  //   final user = _profileController.userInfo.value;
-  //   if(user != null){
-  //     _nameTEController.text = user.fullName;
-  //     _phonenumberTEController.text = user.phone;
-  //     _selectedImage = user.avatarUrl
-  //   }
-  // }
+  setInitial(){
+    final user = _profileController.userInfo.value;
+    if(user != null){
+      _nameTEController.text = user.fullName;
+      _phonenumberTEController.text = user.phone;
+      imageUrl = user.avatarUrl;
+    }
+  }
 
   _submit() {
     _profileController.updatePersonalInfo(
       _nameTEController.text,
       _phonenumberTEController.text,
-      _selectedImage!,   // <-- allow null
+      _selectedImage,   // <-- allow null!
     );
   }
+
 
 
   @override
@@ -93,7 +96,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       borderRadius: BorderRadius.circular(60),
                       icon: Icons.person,
                       iconColor: Colors.black,
-                      imageFile: _selectedImage, onTap:  _pickImage, // show picked image
+                      imageFile: _selectedImage,
+                      imageUrl: imageUrl,
+                      onTap:  _pickImage, // show picked image
                     ),
                     Positioned(
                       right: 0,

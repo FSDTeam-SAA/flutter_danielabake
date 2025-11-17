@@ -2,6 +2,7 @@ import 'package:danielabake/core/common/widgets/elevated_button.dart';
 import 'package:danielabake/core/constants/assets_const.dart';
 import 'package:danielabake/features/auth/controller/auth_controller.dart';
 import 'package:danielabake/features/profile_screens/screens/change_password_screen.dart';
+import 'package:danielabake/features/profile_screens/screens/favorite_items.dart';
 import 'package:danielabake/features/profile_screens/screens/my_orders_screen.dart';
 import 'package:flutter/material.dart' hide Icons;
 import 'package:get/get.dart';
@@ -109,7 +110,7 @@ class ProfileCard extends StatelessWidget {
                   image: Images.favorite,
                   title: 'Favorites',
                   subtitle: 'See your saved dishes',
-                  onTap: () {},
+                  onTap: () {Get.to(() => FavoriteItems());},
                 ),
                 MenuTile(
                   image: Images.settings,

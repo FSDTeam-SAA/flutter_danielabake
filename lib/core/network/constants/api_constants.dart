@@ -58,5 +58,6 @@ class ProfileEndpoints {
   static const String _base = '${ApiConstants.baseUrl}/profile';
   String fetchProfile(String userId) => '$_base/$userId';
   String updateProfile(String userId) => '$_base/$userId';
+  // String fetchCategory(String userId) =>
 }
 

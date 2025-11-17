@@ -47,11 +47,12 @@ class ProfileController extends BaseController {
 
   Future<void> updatePersonalInfo(
     String fullName,
-    String phoneNumber, File image
+    String phoneNumber, File? image
   ) async {
 
     final userId = await _authStorageService.getUserId();
     DPrint.log('UserId: $userId');
+
     if (userId == null || userId.isEmpty) {
       setError('User ID not found. Please log in again.');
       Get.snackbar('Error', 'User ID not found. Please log in again.');
@@ -59,9 +60,14 @@ class ProfileController extends BaseController {
       return;
     }
 
+    _multiFormDataManager.clearFiles("avatar");
+
     _multiFormDataManager.addTextData("fullName", fullName);
     _multiFormDataManager.addTextData("phone", phoneNumber);
-    _multiFormDataManager.addImageFile(image, key: "avatar");
+    if (image != null) {
+      _multiFormDataManager.addImageFile(image, key: "avatar");
+    }
+
 
     final formRequest = await _multiFormDataManager.toFormDataAsync();
 
@@ -76,6 +82,7 @@ class ProfileController extends BaseController {
         DPrint.log('Personal info: ${success.message}');
         await fetchProfile();
         Get.back();
+        _multiFormDataManager.clear();
         setError(success.message);
       },
     );
@@ -100,6 +107,31 @@ class ProfileController extends BaseController {
       },
     );
   }
+
+  Future<void> fetchCtegory() async {
+    final userId = await _authStorageService.getUserId();
+    DPrint.log('UserId: $userId');
+    if (userId == null || userId.isEmpty) {
+      setError('User ID not found. Please log in again.');
+      Get.snackbar('Error', 'User ID not found. Please log in again.');
+      setLoading(false);
+      return;
+    }
+
+    final result = await _profileRepository.fetchProfile(userId);
+
+    result.fold(
+          (fail) {
+        setError(fail.message);
+        DPrint.log('data fetch failed');
+      },
+          (success) {
+        userInfo.value = success.data;
+        DPrint.log(success.message);
+      },
+    );
+  }
+
   //
   // Future<void> uploadPhoto(File image) async {
   //   setLoading(true);

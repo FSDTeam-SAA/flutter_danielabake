@@ -1,4 +1,5 @@
 import 'package:danielabake/features/profile_screens/models/request/current_password_update_request_model.dart';
+import 'package:danielabake/features/profile_screens/models/response/category_response_model.dart';
 import 'package:dio/dio.dart';
 
 import '../../../core/network/network_result.dart';
@@ -15,6 +16,7 @@ abstract class ProfileRepository {
 //
 //Change password
   NetworkResult<void> changePass(UpdatePasswordRequestModel request);
+  // NetworkResult<Category> fetchCategory(String userId);
 //
 //   NetworkResult<UserResponse> uploadPhoto(FormData request);
 //

@@ -1,6 +1,6 @@
 class GetProfileResponseModel {
   final String id;
-  final UserModel user;
+  final NestedUser user;
   final String avatarUrl;
   final String fullName;
   final int totalOrders;
@@ -8,6 +8,7 @@ class GetProfileResponseModel {
   final String createdAt;
   final String updatedAt;
   final int v;
+  final String phone;
 
   GetProfileResponseModel({
     required this.id,
@@ -19,12 +20,13 @@ class GetProfileResponseModel {
     required this.createdAt,
     required this.updatedAt,
     required this.v,
+    required this.phone,
   });
 
   factory GetProfileResponseModel.fromJson(Map<String, dynamic> json) {
     return GetProfileResponseModel(
-      id: json["_id"],
-      user: UserModel.fromJson(json["user"]),
+      id: json["_id"] ?? "",
+      user: NestedUser.fromJson(json["user"] ?? {}),
       avatarUrl: json["avatarUrl"] ?? "",
       fullName: json["fullName"] ?? "",
       totalOrders: json["totalOrders"] ?? 0,
@@ -32,23 +34,24 @@ class GetProfileResponseModel {
       createdAt: json["createdAt"] ?? "",
       updatedAt: json["updatedAt"] ?? "",
       v: json["__v"] ?? 0,
+      phone: json["phone"] ?? "",
     );
   }
 }
 
-class UserModel {
+class NestedUser {
   final String id;
   final String name;
   final String email;
 
-  UserModel({
+  NestedUser({
     required this.id,
     required this.name,
     required this.email,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
+  factory NestedUser.fromJson(Map<String, dynamic> json) {
+    return NestedUser(
       id: json["_id"] ?? "",
       name: json["name"] ?? "",
       email: json["email"] ?? "",

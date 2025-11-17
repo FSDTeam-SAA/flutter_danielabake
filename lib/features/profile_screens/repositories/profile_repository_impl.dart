@@ -7,6 +7,7 @@ import '../../../../core/network/api_client.dart';
 import '../../../../core/network/constants/api_constants.dart';
 import '../../../../core/network/network_result.dart';
 import '../models/request/current_password_update_request_model.dart';
+import '../models/response/category_response_model.dart';
 
 
 
@@ -43,6 +44,12 @@ class ProfileRepositoryImpl implements ProfileRepository {
       fromJsonT: (json) => [],
     );
   }
+
+  // NetworkResult<Category> fetchCategory(String userId){
+  //   return _apiClient.get(endpoint: ApiConstants.profile.fetchProfile(userId), fromJsonT: (json) =>
+  //       GetProfileResponseModel.fromJson(json as Map<String, dynamic>),
+  //   );
+  // }
   //
   // @override
   // NetworkResult<UserResponse> uploadPhoto(FormData request) {
