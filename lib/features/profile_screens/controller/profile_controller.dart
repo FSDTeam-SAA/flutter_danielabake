@@ -2,6 +2,7 @@ import 'dart:developer' as DPrint;
 import 'dart:io';
 import 'package:danielabake/features/profile_screens/models/request/current_password_update_request_model.dart';
 import 'package:danielabake/features/profile_screens/models/response/get_profile_response_model.dart';
+import 'package:danielabake/features/profile_screens/models/response/ongoing_order_response_model.dart';
 import 'package:get/get.dart';
 import '../../../../core/base/base_controller.dart';
 import '../../../core/network/services/auth_storage_service.dart';
@@ -13,12 +14,14 @@ class ProfileController extends BaseController {
   final AuthStorageService _authStorageService = AuthStorageService();
 
   final Rxn<GetProfileResponseModel> userInfo = Rxn<GetProfileResponseModel>();
+  final Rxn<OngoingOrderResponseModel> ongoingOrder = Rxn<OngoingOrderResponseModel>();
   final MultiFormDataManager _multiFormDataManager = MultiFormDataManager();
 
   @override
   void onInit() {
     super.onInit();
     fetchProfile(); //Fetch when controller is created
+    fetchOngoingOrders();
   }
 
   Future<void> fetchProfile() async {
@@ -127,6 +130,22 @@ class ProfileController extends BaseController {
       },
           (success) {
         userInfo.value = success.data;
+        DPrint.log(success.message);
+      },
+    );
+  }
+
+  Future<void> fetchOngoingOrders() async {
+
+    final result = await _profileRepository.fetchOngoingOrder();
+
+    result.fold(
+          (fail) {
+        setError(fail.message);
+        DPrint.log('data fetch failed');
+      },
+          (success) {
+        ongoingOrder.value = success.data;
         DPrint.log(success.message);
       },
     );

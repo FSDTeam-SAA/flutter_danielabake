@@ -5,15 +5,16 @@ import 'order_tile.dart';
 
 class OrdersList extends StatelessWidget {
   final List<OrderModel> orders;
-
   const OrdersList({super.key, required this.orders});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      padding: const EdgeInsets.only(top: 16),
+      padding: const EdgeInsets.all(12),
       itemCount: orders.length,
-      itemBuilder: (_, index) => OrderTile(order: orders[index]),
+      itemBuilder: (context, index) {
+        return OrderTile(order: orders[index]);
+      },
     );
   }
 }

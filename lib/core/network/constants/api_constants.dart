@@ -37,6 +37,7 @@ class ApiConstants {
   /// [Endpoint Groups
   static AuthEndpoints get auth => AuthEndpoints();
   static ProfileEndpoints get profile => ProfileEndpoints();
+  static HomeEndpoints get home => HomeEndpoints();
 
 }
 
@@ -58,6 +59,13 @@ class ProfileEndpoints {
   static const String _base = '${ApiConstants.baseUrl}/profile';
   String fetchProfile(String userId) => '$_base/$userId';
   String updateProfile(String userId) => '$_base/$userId';
-  // String fetchCategory(String userId) =>
+  final String fetchOngoing = '${ApiConstants.baseUrl}/orders/my?filter=ongoing';
+  // String fetchCategory(String userId) =>;
+}
+
+class HomeEndpoints {
+  final String category = '${ApiConstants.baseUrl}/categories';
+  final String favorite = '${ApiConstants.baseUrl}/favorites';
+  // String fetchCategory(String userId) =>;
 }
 

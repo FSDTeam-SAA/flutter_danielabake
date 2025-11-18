@@ -8,6 +8,7 @@ import '../../../../core/network/constants/api_constants.dart';
 import '../../../../core/network/network_result.dart';
 import '../models/request/current_password_update_request_model.dart';
 import '../models/response/category_response_model.dart';
+import '../models/response/ongoing_order_response_model.dart';
 
 
 
@@ -24,6 +25,33 @@ class ProfileRepositoryImpl implements ProfileRepository {
     );
   }
 
+  @override
+  NetworkResult<OngoingOrderResponseModel> fetchOngoingOrder() {
+    return _apiClient.get(
+      endpoint: ApiConstants.profile.fetchOngoing,
+      fromJsonT: (json) {
+        final data = json['data'] as Map<String, dynamic>?;
+
+        // Extract total, page, pages
+        final total = data?['total'] as int? ?? 0;
+        final page = data?['page'] as int? ?? 1;
+        final pages = data?['pages'] as int? ?? 1;
+
+        // Extract orders
+        final ordersJson = data?['orders'] as List<dynamic>? ?? [];
+        final orders = ordersJson
+            .map((e) => Order.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        return OngoingOrderResponseModel(
+          total: total,
+          page: page,
+          pages: pages,
+          orders: orders,
+        );
+      },
+    );
+  }
 
 
 

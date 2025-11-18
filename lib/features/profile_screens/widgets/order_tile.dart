@@ -32,8 +32,8 @@ class OrderTile extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                Images.food,
+              child: Image.network(
+                order.image,
                 height: 75,
                 width: 75,
                 fit: BoxFit.cover,

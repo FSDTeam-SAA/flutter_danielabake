@@ -4,6 +4,8 @@ import 'package:danielabake/core/common/widgets/appbar_text.dart';
 import 'package:danielabake/core/common/widgets/text_with_view_all_button.dart';
 import 'package:danielabake/core/constants/assets_const.dart';
 import 'package:danielabake/core/utils/app_svg.dart';
+import 'package:danielabake/features/home/screens/all_category_screen.dart';
+import 'package:danielabake/features/home/screens/category_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutx_core/core/theme/gap.dart';
 import 'package:get/get.dart';
@@ -44,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
 
-      body: SingleChildScrollView( // 👈 FIX: Make content scrollable
+      body: SingleChildScrollView( //FIX: Make content scrollable
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -60,11 +62,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              TextWithViewAllButton(text: 'Select by Category', onTap: () {}),
+              TextWithViewAllButton(text: 'Select by Category', onTap: () {Get.to(() => AllCategoryScreen());}),
+
+              CategorySection(),
+
               const SizedBox(height: 24),
               TextWithViewAllButton(text: 'Popular Item', onTap: () {}),
 
-              // 👇 Your GridLayout should fit inside scroll view
+              //Your GridLayout should fit inside scroll view
               GridLayout(
                 mainAxisExtent: 260,
                 itemCount: 6,
@@ -77,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       print('Added to cart');
                     },
                     onFavorite: () {
-                      print('Toggled favorite');
+
                     },
                   );
                 },
