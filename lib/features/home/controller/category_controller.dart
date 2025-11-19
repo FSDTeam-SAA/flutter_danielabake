@@ -10,8 +10,7 @@ class CategoryController extends BaseController {
   final _categoryRepository = Get.find<CategoryRepository>();
   final AuthStorageService _authStorageService = AuthStorageService();
 
-  final Rxn<GetCategoryResponseModel> category =
-      Rxn<GetCategoryResponseModel>();
+  final Rxn<GetCategoryResponseModel> category = Rxn<GetCategoryResponseModel>();
 
   // final Rxn<OngoingOrderResponseModel> ongoingOrder = Rxn<OngoingOrderResponseModel>();
   // final MultiFormDataManager _multiFormDataManager = MultiFormDataManager();

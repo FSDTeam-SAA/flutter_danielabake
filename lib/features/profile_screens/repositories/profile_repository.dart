@@ -1,4 +1,5 @@
 import 'package:danielabake/features/profile_screens/models/request/current_password_update_request_model.dart';
+import 'package:danielabake/features/profile_screens/models/response/get_favorite_items_response_model.dart';
 import 'package:danielabake/features/profile_screens/models/response/ongoing_order_response_model.dart';
 import 'package:dio/dio.dart';
 
@@ -17,6 +18,7 @@ abstract class ProfileRepository {
 //Change password
   NetworkResult<void> changePass(UpdatePasswordRequestModel request);
   NetworkResult<OngoingOrderResponseModel> fetchOngoingOrder();
+  NetworkResult<List<GetFavoriteItemsResponseModel>> fetchFavoriteItems(String userId);
   // NetworkResult<Category> fetchCategory(String userId);
 //
 //   NetworkResult<UserResponse> uploadPhoto(FormData request);

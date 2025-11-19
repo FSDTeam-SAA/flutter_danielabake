@@ -2,7 +2,7 @@ class GetCategoryResponseModel {
   final int total;
   final int page;
   final int pages;
-  final List<Category> data;
+  final List<CategoryItem> data;
 
   GetCategoryResponseModel({
     required this.total,
@@ -13,53 +13,64 @@ class GetCategoryResponseModel {
 
   factory GetCategoryResponseModel.fromJson(Map<String, dynamic> json) {
     return GetCategoryResponseModel(
-      total: json['total'],
-      page: json['page'],
-      pages: json['pages'],
-      data: (json['data'] as List)
-          .map((item) => Category.fromJson(item))
+      total: json["total"],
+      page: json["page"],
+      pages: json["pages"],
+      data: (json["data"] as List)
+          .map((e) => CategoryItem.fromJson(e))
           .toList(),
     );
   }
-
-  Map<String, dynamic> toJson() => {
-    'total': total,
-    'page': page,
-    'pages': pages,
-    'data': data.map((item) => item.toJson()).toList(),
-  };
 }
 
-class Category {
+class CategoryItem {
   final String id;
   final String name;
   final String image;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final int bgColor;
+  final String createdAt;
+  final String updatedAt;
 
-  Category({
+  CategoryItem({
     required this.id,
     required this.name,
     required this.image,
+    required this.bgColor,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
-      id: json['_id'],
-      name: json['name'],
-      image: json['image'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
+  factory CategoryItem.fromJson(Map<String, dynamic> json) {
+    int parseBgColor(dynamic value) {
+      if (value == null) return 0xFFFFFFFF; // fallback white
+
+      String colorStr = value.toString().trim();
+
+      // Remove # if present
+      if (colorStr.startsWith('#')) {
+        colorStr = colorStr.substring(1);
+      }
+
+      // Add 0x prefix if not already there
+      if (!colorStr.startsWith('0x') && !colorStr.startsWith('0X')) {
+        colorStr = '0x$colorStr';
+      }
+
+      // If the string is like "FF5733" (without alpha), add full opacity
+      if (colorStr.length == 8) { // #RRGGBB -> 0xRRGGBB (no alpha)
+        colorStr = '0xFF${colorStr.substring(2)}'; // add full opacity
+      }
+
+      return int.tryParse(colorStr) ?? 0xFFFFFFFF; // fallback to white if parsing fails
+    }
+
+    return CategoryItem(
+      id: json["_id"],
+      name: json["name"],
+      image: json["image"],
+      bgColor: parseBgColor(json["bgColor"]),
+      createdAt: json["createdAt"],
+      updatedAt: json["updatedAt"],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-    '_id': id,
-    'name': name,
-    'image': image,
-    'createdAt': createdAt.toIso8601String(),
-    'updatedAt': updatedAt.toIso8601String(),
-  };
 }

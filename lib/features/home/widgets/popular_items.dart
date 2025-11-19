@@ -1,36 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'dart:developer' as DPrint;
+
+import '../controller/favorite_food_controller.dart';
 
 class FoodCard extends StatelessWidget {
   final String imagePath;
   final String title;
   final String price;
+  final String itemId;
+  final RxBool isFavorite; // Observable
   final VoidCallback onAdd;
-  final VoidCallback onFavorite;
-  final bool isFavorite;
+  final Future<void> Function(bool newValue)? onFavoriteToggle; // optional callback
 
   const FoodCard({
     super.key,
     required this.imagePath,
     required this.title,
     required this.price,
+    required this.itemId,
+    required this.isFavorite,
     required this.onAdd,
-    required this.onFavorite,
-    this.isFavorite = true,
+    this.onFavoriteToggle,
   });
 
   @override
   Widget build(BuildContext context) {
+    final FavoriteFoodController favoriteController = Get.find<FavoriteFoodController>();
+
     return Container(
       width: 158,
       height: 262,
       decoration: BoxDecoration(
-        color: const Color(0xFFFFE0B2), // light peach background
+        color: const Color(0xFFFFE0B2),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // image with favorite icon
+          // Image with favorite icon
           Stack(
             children: [
               ClipRRect(
@@ -38,7 +46,7 @@ class FoodCard extends StatelessWidget {
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
                 ),
-                child: Image.asset(
+                child: Image.network(
                   imagePath,
                   height: 160,
                   width: double.infinity,
@@ -48,23 +56,38 @@ class FoodCard extends StatelessWidget {
               Positioned(
                 top: 8,
                 right: 8,
-                child: InkWell(
-                  onTap: onFavorite,
+                child: Obx(() => InkWell(
+                  onTap: () async {
+                    try {
+                      if (!isFavorite.value) {
+                        // Add favorite
+                        await favoriteController.favorite(itemId);
+                        isFavorite.value = true; // update UI after success
+                      } else {
+                        // Remove favorite
+                        await favoriteController.removeFavorite(itemId);
+                        isFavorite.value = false; // update UI after success
+                      }
+                    } catch (e) {
+                      DPrint.log("Favorite toggle error: $e");
+                    }
+                  },
                   child: CircleAvatar(
                     radius: 12,
-                    backgroundColor: Color(0xBD3C84F0), // BD = 74% opacity,
+                    backgroundColor: const Color(0xBD3C84F0),
                     child: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: isFavorite ? Colors.white : Colors.grey,
+                      isFavorite.value ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorite.value ? Colors.white : Colors.grey,
                       size: 16,
                     ),
                   ),
-                ),
+                ))
+
               ),
             ],
           ),
 
-          // title
+          // Title
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Text(
@@ -76,10 +99,9 @@ class FoodCard extends StatelessWidget {
             ),
           ),
 
+          const SizedBox(height: 25),
 
-          SizedBox(height: 25,),
-
-          // price + add button
+          // Price + add button
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
@@ -97,7 +119,7 @@ class FoodCard extends StatelessWidget {
                   child: const CircleAvatar(
                     radius: 12,
                     backgroundColor: Color(0xFF0066FF),
-                    child: Icon(Icons.add, color: Colors.white, size: 20,),
+                    child: Icon(Icons.add, color: Colors.white, size: 20),
                   ),
                 ),
               ],

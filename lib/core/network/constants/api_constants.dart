@@ -38,6 +38,7 @@ class ApiConstants {
   static AuthEndpoints get auth => AuthEndpoints();
   static ProfileEndpoints get profile => ProfileEndpoints();
   static HomeEndpoints get home => HomeEndpoints();
+  static OrderEndpoints get order => OrderEndpoints();
 
 }
 
@@ -59,6 +60,7 @@ class ProfileEndpoints {
   static const String _base = '${ApiConstants.baseUrl}/profile';
   String fetchProfile(String userId) => '$_base/$userId';
   String updateProfile(String userId) => '$_base/$userId';
+  String fetchFavorite(String userId) => '${ApiConstants.baseUrl}/favorites/$userId';
   final String fetchOngoing = '${ApiConstants.baseUrl}/orders/my?filter=ongoing';
   // String fetchCategory(String userId) =>;
 }
@@ -66,6 +68,15 @@ class ProfileEndpoints {
 class HomeEndpoints {
   final String category = '${ApiConstants.baseUrl}/categories';
   final String favorite = '${ApiConstants.baseUrl}/favorites';
+  final String removeFavorite = '${ApiConstants.baseUrl}/favorites';
+  final String popular = '${ApiConstants.baseUrl}/items';
+  final String addCart = '${ApiConstants.baseUrl}/cart/add';
+  // String fetchCategory(String userId) =>;
+}
+
+class OrderEndpoints {
+  String fetchCart(String userId) => '${ApiConstants.baseUrl}/cart/$userId';
+  String fetchOrder(String userId) => '${ApiConstants.baseUrl}/orders/$userId';
   // String fetchCategory(String userId) =>;
 }
 

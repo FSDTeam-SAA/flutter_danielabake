@@ -36,7 +36,7 @@ class CategorySection extends StatelessWidget {
             return CategoryCard(
               title: cat.name,
               imageUrl: cat.image,
-              bgColor: Colors.pink.shade100,   // তোমার bgColor যেহেতু নেই backend এ
+              bgColor: Color(cat.bgColor),
             );
           },
         ),

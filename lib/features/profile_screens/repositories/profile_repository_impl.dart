@@ -8,6 +8,7 @@ import '../../../../core/network/constants/api_constants.dart';
 import '../../../../core/network/network_result.dart';
 import '../models/request/current_password_update_request_model.dart';
 import '../models/response/category_response_model.dart';
+import '../models/response/get_favorite_items_response_model.dart';
 import '../models/response/ongoing_order_response_model.dart';
 
 
@@ -23,6 +24,12 @@ class ProfileRepositoryImpl implements ProfileRepository {
     return _apiClient.get(endpoint: ApiConstants.profile.fetchProfile(userId), fromJsonT: (json) =>
         GetProfileResponseModel.fromJson(json as Map<String, dynamic>),
     );
+  }
+
+@override
+NetworkResult<List<GetFavoriteItemsResponseModel>> fetchFavoriteItems(String userId){
+    return _apiClient.get(endpoint: ApiConstants.profile.fetchFavorite(userId),
+        fromJsonT: (json) => (json as List).map((item) => GetFavoriteItemsResponseModel.fromJson(item)).toList());
   }
 
   @override

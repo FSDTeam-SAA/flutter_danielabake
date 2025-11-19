@@ -1,7 +1,6 @@
 import 'dart:developer' as DPrint;
 import 'package:danielabake/features/home/models/response/get_category_response_model.dart';
 import 'package:danielabake/features/home/models/response/get_popular_items_response_model.dart';
-import 'package:danielabake/features/home/repositories/category_repository.dart';
 import 'package:danielabake/features/home/repositories/home_repository.dart';
 import 'package:get/get.dart';
 import '../../../../core/base/base_controller.dart';
@@ -14,7 +13,7 @@ class HomeController extends BaseController {
   final Rxn<GetCategoryResponseModel> category =
   Rxn<GetCategoryResponseModel>();
 
-  final Rxn<GetPopularItemResponseModel> ongoingOrder = Rxn<GetPopularItemResponseModel>();
+  final Rxn<GetPopularItemResponseModel> popularItem = Rxn<GetPopularItemResponseModel>();
   // final MultiFormDataManager _multiFormDataManager = MultiFormDataManager();
 
   @override
@@ -33,7 +32,7 @@ class HomeController extends BaseController {
         DPrint.log('data fetch failed');
       },
           (success) {
-        ongoingOrder.value = success.data;
+        popularItem.value = success.data;
         DPrint.log(success.message);
       },
     );

@@ -1,6 +1,7 @@
 import 'dart:developer' as DPrint;
 import 'dart:io';
 import 'package:danielabake/features/profile_screens/models/request/current_password_update_request_model.dart';
+import 'package:danielabake/features/profile_screens/models/response/get_favorite_items_response_model.dart';
 import 'package:danielabake/features/profile_screens/models/response/get_profile_response_model.dart';
 import 'package:danielabake/features/profile_screens/models/response/ongoing_order_response_model.dart';
 import 'package:get/get.dart';
@@ -16,12 +17,14 @@ class ProfileController extends BaseController {
   final Rxn<GetProfileResponseModel> userInfo = Rxn<GetProfileResponseModel>();
   final Rxn<OngoingOrderResponseModel> ongoingOrder = Rxn<OngoingOrderResponseModel>();
   final MultiFormDataManager _multiFormDataManager = MultiFormDataManager();
+  final favoriteItems = <GetFavoriteItemsResponseModel>[].obs;
 
   @override
   void onInit() {
     super.onInit();
     fetchProfile(); //Fetch when controller is created
     fetchOngoingOrders();
+    fetchFavoriteItem();
   }
 
   Future<void> fetchProfile() async {
@@ -146,6 +149,31 @@ class ProfileController extends BaseController {
       },
           (success) {
         ongoingOrder.value = success.data;
+        DPrint.log(success.message);
+      },
+    );
+  }
+
+  Future<void> fetchFavoriteItem() async {
+    final userId = await _authStorageService.getUserId();
+    DPrint.log('UserId: $userId');
+    if (userId == null || userId.isEmpty) {
+      setError('User ID not found. Please log in again.');
+      Get.snackbar('Error', 'User ID not found. Please log in again.');
+      setLoading(false);
+      return;
+    }
+
+    final result = await _profileRepository.fetchFavoriteItems(userId);
+
+    result.fold(
+          (fail) {
+        setError(fail.message);
+        DPrint.log('data fetch failed');
+      },
+          (success) {
+        favoriteItems.value = success.data;
+        favoriteItems.refresh();
         DPrint.log(success.message);
       },
     );

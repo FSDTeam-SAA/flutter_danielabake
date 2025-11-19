@@ -31,7 +31,7 @@ class MenuTile extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Container( width: 20, height: 20, child: AppSvg(asset: image)),
+                child: SizedBox( width: 20, height: 20, child: AppSvg(asset: image)),
               ),
             ),
             title: Text(
