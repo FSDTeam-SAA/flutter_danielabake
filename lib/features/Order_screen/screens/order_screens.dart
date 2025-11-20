@@ -1,14 +1,14 @@
 import 'package:danielabake/core/common/widgets/abbbar_search.dart';
 import 'package:danielabake/core/common/widgets/app_scaffold.dart';
+import 'package:danielabake/core/common/widgets/button_widgets.dart';
+import 'package:danielabake/features/Order_screen/screens/checkout_screen.dart';
 import 'package:danielabake/features/Order_screen/widget/cart_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../core/common/widgets/text_with_view_all_button.dart';
 import '../controller/order_controller.dart';
-import '../widget/ordered_items_cart.dart';
 
 class OrderScreens extends StatefulWidget {
-  OrderScreens({super.key});
+  const OrderScreens({super.key});
 
   @override
   State<OrderScreens> createState() => _OrderScreensState();
@@ -21,6 +21,7 @@ class _OrderScreensState extends State<OrderScreens> {
   void initState() {
     super.initState();
     controller.fetchCart();
+    controller.fetchOrders(); // fetch orders from API
   }
 
   @override
@@ -28,7 +29,7 @@ class _OrderScreensState extends State<OrderScreens> {
     return AppScaffold(
       appBar: AppBar(
         title: const Text(
-          'My Orders',
+          'My Cart',
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w500,
@@ -36,19 +37,13 @@ class _OrderScreensState extends State<OrderScreens> {
           ),
         ),
         centerTitle: false,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 30.0),
-            child: AppBarSearch(),
-          )
-        ],
       ),
       body: Column(
         children: [
           // Cart Items Section
           Expanded(
             child: Obx(() {
-              if (controller.category.value == null) {
+              if (controller.order.value == null) {
                 return const Center(child: CircularProgressIndicator());
               }
 
@@ -59,7 +54,6 @@ class _OrderScreensState extends State<OrderScreens> {
               }
 
               return ListView.builder(
-                //padding: const EdgeInsets.only(bottom: 10),
                 itemCount: cartItems.length,
                 itemBuilder: (context, index) {
                   final item = cartItems[index];
@@ -69,38 +63,71 @@ class _OrderScreensState extends State<OrderScreens> {
             }),
           ),
 
+          // Only show the button if there are items in the cart
+          Obx(() {
+            if (controller.category.value != null &&
+                controller.category.value!.items.isNotEmpty) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: PrimaryButton(
+                  text: 'Place Order',
+                  onSimplePressed: () async => Get.to(() => CheckoutScreen()),
+                ),
+              );
+            } else {
+              return const SizedBox.shrink(); // empty space if no items
+            }
+          }),
           // Ordered Items header
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: TextWithViewAllButton(
-              text: 'Ordered Items',
-              onTap: () {},
-            ),
-          ),
-
-
+          // Padding(
+          //   padding: const EdgeInsets.only(bottom: 10),
+          //   child: TextWithViewAllButton(
+          //     text: 'Ordered Items',
+          //     onTap: () {},
+          //   ),
+          // ),
+          //
+          // // Orders List
+          // // Orders List
           // Obx(() {
-          //   if (controller.order.value == null) {
+          //   if (controller.isLoading.value) {
           //     return const Center(child: CircularProgressIndicator());
           //   }
           //
-          //   final orderedItems = controller.order.value!.items;
-          //
-          //   if (orderedItems.isEmpty) {
-          //     return const Text("No ordered items found");
+          //   if (controller.order.value == null || controller.order.value!.orders.isEmpty) {
+          //     return const Center(child: Text("No Orders Found"));
           //   }
           //
-          //   return SizedBox(
-          //     height: 250, // scrollable inside column
+          //   final orders = controller.order.value!.orders;
+          //
+          //   return Expanded(
           //     child: ListView.builder(
-          //       scrollDirection: Axis.horizontal,
-          //       itemCount: orderedItems.length,
-          //       itemBuilder: (context, index) {
-          //         return OrderedItemCard(orderItem: orderedItems[index]);
+          //       itemCount: orders.length,
+          //       itemBuilder: (context, orderIndex) {
+          //         final order = orders[orderIndex];
+          //
+          //         return Column(
+          //           crossAxisAlignment: CrossAxisAlignment.start,
+          //           children: [
+          //             ListView.builder(
+          //               shrinkWrap: true,
+          //               physics: const NeverScrollableScrollPhysics(),
+          //               itemCount: order.items.length,
+          //               itemBuilder: (context, itemIndex) {
+          //                 final orderedItem = order.items[itemIndex];
+          //                 return OrderedItemCard(
+          //                   orderItem: orderedItem,
+          //                   address: order.address,
+          //                   status: order.status,
+          //                 );
+          //               },
+          //             ),
+          //           ],
+          //         );
           //       },
           //     ),
           //   );
-          // }),
+          // })
         ],
       ),
     );

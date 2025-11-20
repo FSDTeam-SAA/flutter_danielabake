@@ -1,16 +1,14 @@
 class GetCartResponseModel {
   final String id;
-  final String userId;
-  final String description;
+  final String user;
   final List<CartItem> items;
   final double total;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final String createdAt;
+  final String updatedAt;
 
   GetCartResponseModel({
     required this.id,
-    required this.userId,
-    required this.description,
+    required this.user,
     required this.items,
     required this.total,
     required this.createdAt,
@@ -19,15 +17,12 @@ class GetCartResponseModel {
 
   factory GetCartResponseModel.fromJson(Map<String, dynamic> json) {
     return GetCartResponseModel(
-      id: json['_id'] as String,
-      userId: json['user'] as String,
-      description: json['user'] as String,
-      items: (json['items'] as List)
-          .map((item) => CartItem.fromJson(item as Map<String, dynamic>))
-          .toList(),
+      id: json['_id'],
+      user: json['user'],
+      items: (json['items'] as List).map((e) => CartItem.fromJson(e)).toList(),
       total: (json['total'] as num).toDouble(),
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
     );
   }
 }
@@ -56,11 +51,13 @@ class ItemDetails {
   final String id;
   final String name;
   final double price;
+  final String description;
   final String image;
 
   ItemDetails({
     required this.id,
     required this.name,
+    required this.description,
     required this.price,
     required this.image,
   });
@@ -69,8 +66,11 @@ class ItemDetails {
     return ItemDetails(
       id: json['_id'] as String,
       name: json['name'] as String,
+      description: json["description"],
       price: (json['price'] as num).toDouble(),
       image: json['image'] as String,
     );
   }
 }
+
+

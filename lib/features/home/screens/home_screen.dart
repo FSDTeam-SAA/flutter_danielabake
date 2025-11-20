@@ -44,7 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.only(right: 20),
             child: Row(
               children: [
-                AppBarSearch(),
                 const SizedBox(width: 16),
                 const Cart(),
               ],
@@ -83,7 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 12),
 
               // Popular items grid
-              // Popular items grid
               Obx(() {
                 final data = _homeController.popularItem.value;
 
@@ -109,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       // Add to cart
                       onAdd: () async {
                         try {
-                          await _cartController.register(item.id, 1); // default quantity 1
+                          await _cartController.addCart(item.id, 1); // default quantity 1
                           Get.snackbar('Success', '${item.name} added to cart');
                         } catch (e) {
                           Get.snackbar('Error', 'Failed to add ${item.name} to cart');

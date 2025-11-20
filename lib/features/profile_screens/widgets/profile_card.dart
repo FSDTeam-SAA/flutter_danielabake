@@ -129,27 +129,28 @@ class ProfileCard extends StatelessWidget {
               color: Color(0x2EFFB972),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: ListTile(
-              leading: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color: Color(0xFFFFEFD5),
+            child: GestureDetector(
+              onTap: (){_authController.logout();},
+              child: ListTile(
+                leading: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Color(0xFFFFEFD5),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: AppSvg(asset: Images.logout),
+                  ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: AppSvg(asset: Images.logout),
+                title: const Text(
+                  "Logout",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
                 ),
-              ),
-              title: const Text(
-                "Logout",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-              trailing: IconButton(
-                onPressed: () => _authController.logout(),
-                icon: AppSvg(asset: Images.arrow),
+                trailing:AppSvg(asset: Images.arrow),
+
               ),
             ),
           )

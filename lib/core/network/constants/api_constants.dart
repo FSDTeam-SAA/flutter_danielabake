@@ -71,12 +71,14 @@ class HomeEndpoints {
   final String removeFavorite = '${ApiConstants.baseUrl}/favorites';
   final String popular = '${ApiConstants.baseUrl}/items';
   final String addCart = '${ApiConstants.baseUrl}/cart/add';
+  final String removeCart = '${ApiConstants.baseUrl}/cart/remove';
   // String fetchCategory(String userId) =>;
 }
 
 class OrderEndpoints {
   String fetchCart(String userId) => '${ApiConstants.baseUrl}/cart/$userId';
-  String fetchOrder(String userId) => '${ApiConstants.baseUrl}/orders/$userId';
+  String fetchOrder = '${ApiConstants.baseUrl}/orders/my';
+  String placeOrder = '${ApiConstants.baseUrl}/orders';
   // String fetchCategory(String userId) =>;
 }
 

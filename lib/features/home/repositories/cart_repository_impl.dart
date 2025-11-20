@@ -3,7 +3,9 @@ import '../../../../core/network/api_client.dart';
 import '../../../../core/network/constants/api_constants.dart';
 import '../../../../core/network/network_result.dart';
 import '../models/request/cart_request_model.dart';
+import '../models/request/remove_cart_request_model.dart';
 import '../models/response/cart_respponse_model.dart';
+import '../models/response/remove_cart_response_model.dart';
 
 
 
@@ -19,6 +21,16 @@ class CartRepositoryImpl implements CartRepository {
       endpoint: ApiConstants.home.addCart,
       data: request.toJson(),
       fromJsonT: (json) => OrderResponse.fromJson(json),
+    );
+  }
+
+
+  @override
+  NetworkResult<void> removeCart(RemoveCartRequestModel request, String userId, String itemId){
+    return _apiClient.delete(
+      endpoint: ApiConstants.home.removeCart,
+      data: request.toJson(),
+      fromJsonT: (json) {},
     );
   }
 }

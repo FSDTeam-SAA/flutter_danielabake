@@ -30,6 +30,9 @@ class Images {
   static const String settings = '$_base1/settings.svg';
   static const String logout = '$_base1/logout.svg';
   static const String arrow = '$_base1/Icon.svg';
+  static const String address = '$_base1/address.svg';
+  static const String phone = '$_base1/phone.svg';
+  static const String delivery = '$_base1/delivery.svg';
 }
 
 class Videos {

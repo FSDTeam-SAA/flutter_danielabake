@@ -3,7 +3,7 @@ import '../../../../core/network/api_client.dart';
 import '../../../../core/network/constants/api_constants.dart';
 import '../../../../core/network/network_result.dart';
 import '../models/response/get_cart_response_model.dart';
-import '../models/response/getorder_by_id_response model.dart';
+import '../models/response/get_order_by_id_response model.dart';
 
 
 
@@ -22,9 +22,9 @@ class CartRepoImpl implements CartRepo{
   }
 
   @override
-  NetworkResult<GetOrderByIdResponseModel> fetchOrder(String userId){
+  NetworkResult<GetOrderByIdResponseModel> fetchOrder(){
     return _apiClient.get(
-      endpoint: ApiConstants.order.fetchOrder(userId),
+      endpoint: ApiConstants.order.fetchOrder,
       fromJsonT: (json) => GetOrderByIdResponseModel.fromJson(json as Map<String, dynamic>),
     );
   }

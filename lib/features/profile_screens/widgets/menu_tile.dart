@@ -23,33 +23,33 @@ class MenuTile extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 18.0, top: 10),
       child: Column(
         children: [
-          ListTile(
-            leading: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                color: Color(0xFFFFEFD5),
+          GestureDetector(
+            onTap: onTap,
+            child: ListTile(
+              leading: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: Color(0xFFFFEFD5),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SizedBox( width: 20, height: 20, child: AppSvg(asset: image)),
+                ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SizedBox( width: 20, height: 20, child: AppSvg(asset: image)),
+              title: Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
               ),
-            ),
-            title: Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-            subtitle: subtitle != null
-                ? Text(subtitle!, style: const TextStyle(color: Colors.black54))
-                : null,
+              subtitle: subtitle != null
+                  ? Text(subtitle!, style: const TextStyle(color: Colors.black54))
+                  : null,
 
-            trailing: IconButton(
-              onPressed: onTap,
-              icon: AppSvg(asset: Images.arrow),
-            ),
+             trailing: AppSvg(asset: Images.arrow),
 
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),

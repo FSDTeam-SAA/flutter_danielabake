@@ -3,18 +3,20 @@ import 'package:get/get.dart';
 import '../../home/controller/cart_controller.dart';
 import '../models/response/get_cart_response_model.dart';
 
-class CartItemCard extends StatelessWidget {
+class CheckoutCard extends StatelessWidget {
   final CartItem cartItem;
 
-  CartItemCard({super.key, required this.cartItem});
+  CheckoutCard({super.key, required this.cartItem});
 
   // Reactive quantity
   final RxInt quantity = 0.obs;
 
   @override
   Widget build(BuildContext context) {
-    quantity.value = cartItem.quantity;
+    // inside CheckoutCard widget
     final AddToCartController controller = Get.find<AddToCartController>();
+
+    quantity.value = cartItem.quantity;
 
     final item = cartItem.item;
     final price = item.price;
@@ -50,7 +52,6 @@ class CartItemCard extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       item.name,
@@ -86,6 +87,8 @@ class CartItemCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+
+                      //here you have to add remove  cart api
                       _squareButton(
                         icon: Icons.remove,
                         onTap: () {
@@ -97,6 +100,7 @@ class CartItemCard extends StatelessWidget {
                           }
                         },
                       ),
+
 
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -111,6 +115,7 @@ class CartItemCard extends StatelessWidget {
                         ),
                       ),
 
+                      //here you have to add add cart api
                       _squareButton(
                         icon: Icons.add,
                         onTap: () {
@@ -120,46 +125,11 @@ class CartItemCard extends StatelessWidget {
                           controller.addCart(cartItem.item.id, quantity.value); // <-- API CALL
                         },
                       ),
-
                     ],
                   ),
                 ],
               ),
             ],
-          ),
-
-          const SizedBox(height: 12),
-
-          // QUANTITY BUTTONS LIKE FIGMA
-
-
-          const SizedBox(height: 12),
-          const Divider(
-            thickness: 1,
-            height: 1,
-            color: Color(0xFFAD653F),
-          ),
-          SizedBox(height: 12,),
-
-          // BOTTOM TOTAL
-          Obx(
-                () => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Total ${quantity.value} items',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,),
-                ),
-                Text(
-                  '\$${(price * quantity.value).toStringAsFixed(2)}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,),
-                ),
-              ],
-            ),
           ),
         ],
       ),

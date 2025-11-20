@@ -1,13 +1,18 @@
 import 'dart:developer' as DPrint;
+import 'package:danielabake/features/Order_screen/models/request/place_order_request_model.dart';
 import 'package:danielabake/features/Order_screen/models/response/get_cart_response_model.dart';
-import 'package:danielabake/features/Order_screen/models/response/getorder_by_id_response%20model.dart';
+import 'package:danielabake/features/Order_screen/models/response/get_order_by_id_response%20model.dart';
 import 'package:danielabake/features/Order_screen/repositories/cart_repository.dart';
+import 'package:danielabake/features/Order_screen/repositories/place_order_repo.dart';
+import 'package:danielabake/features/home/screens/home_screen.dart';
+import 'package:danielabake/navigation_menu.dart';
 import 'package:get/get.dart';
 import '../../../../core/base/base_controller.dart';
 import '../../../core/network/services/auth_storage_service.dart';
 
 class OrderController extends BaseController {
   final _cartRepo = Get.find<CartRepo>();
+  final _placeOrderRepo = Get.find<PlaceOrderRepo>();
   final AuthStorageService _authStorageService = AuthStorageService();
 
   final Rxn<GetCartResponseModel> category = Rxn<GetCartResponseModel>();
@@ -36,11 +41,11 @@ class OrderController extends BaseController {
     final result = await _cartRepo.fetchCart(userId);
 
     result.fold(
-          (fail) {
+      (fail) {
         setError(fail.message);
         DPrint.log('Fetch Cart failed');
       },
-          (success) {
+      (success) {
         category.value = success.data;
         DPrint.log(success.message);
       },
@@ -48,25 +53,41 @@ class OrderController extends BaseController {
   }
 
   Future<void> fetchOrders() async {
+    final result = await _cartRepo.fetchOrder();
+
+    result.fold(
+      (fail) {
+        DPrint.log("Fetch Orders Failed: ${fail.message}");
+      },
+      (success) {
+        DPrint.log("Raw order data: ${success.data}");
+        order.value = success.data;
+      },
+    );
+  }
+
+  Future<void> placeOrder(String address, String phone) async {
     final userId = await _authStorageService.getUserId();
     DPrint.log('UserId: $userId');
     if (userId == null || userId.isEmpty) {
       setError('User ID not found. Please log in again.');
       Get.snackbar('Error', 'User ID not found. Please log in again.');
-      setLoading(false);
       return;
     }
 
-    final result = await _cartRepo.fetchOrder(userId);
+    final request = CheckoutRequestModel(userId: userId, address: address, phone: phone
+    );
+
+    final result = await _placeOrderRepo.placeOrder(request, userId);
 
     result.fold(
           (fail) {
         setError(fail.message);
-        DPrint.log('Fetch Cart failed');
+        DPrint.log("Place Order success result : ${fail.message}");
       },
           (success) {
-        order.value = success.data;
-        DPrint.log(success.message);
+        DPrint.log("Place order result : ${success.data.id}");
+        Get.offAll(() => NavigationMenu());
       },
     );
   }

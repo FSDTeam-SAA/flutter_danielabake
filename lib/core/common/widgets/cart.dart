@@ -1,6 +1,8 @@
 import 'package:danielabake/core/constants/assets_const.dart';
 import 'package:danielabake/core/utils/app_svg.dart';
+import 'package:danielabake/features/Order_screen/screens/order_screens.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 
 class Cart extends StatelessWidget {
   const Cart({super.key});
@@ -14,7 +16,7 @@ class Cart extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: AppSvg(asset: Images.cart),
+          child: GestureDetector(onTap: () {Get.to(() => OrderScreens());},child: AppSvg(asset: Images.cart)),
         )
     );
   }

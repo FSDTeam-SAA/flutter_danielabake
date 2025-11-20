@@ -101,7 +101,7 @@ class NavigationController extends GetxController {
 
   final List<Map<String, dynamic>> items = [
     {'icon': Images.home, 'label': 'Home'},
-    {'icon': Images.order, 'label': 'Store'},
+    {'icon': Images.order, 'label': 'Orders'},
     {'icon': Images.chat, 'label': 'Chat'},
     {'icon': Images.profile, 'label': 'Profile'},
   ];

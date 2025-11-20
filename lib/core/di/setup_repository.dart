@@ -1,6 +1,8 @@
 import 'package:danielabake/core/utils/getx_helper.dart';
 import 'package:danielabake/features/Order_screen/repositories/cart_repository.dart';
 import 'package:danielabake/features/Order_screen/repositories/cart_repository_impl.dart';
+import 'package:danielabake/features/Order_screen/repositories/place_order_repo.dart';
+import 'package:danielabake/features/Order_screen/repositories/place_order_repo_impl.dart';
 import 'package:danielabake/features/auth/repositories/auth_repository.dart';
 import 'package:danielabake/features/auth/repositories/auth_repository_impl.dart';
 import 'package:danielabake/features/home/repositories/cart_repository.dart';
@@ -24,4 +26,5 @@ void setupRepository() {
   Get.getOrPut<FavoriteFoodRepository>(() => FavoriteFoodRepositoryImpl(apiClient: Get.find()));
   Get.getOrPut<CartRepository>(() => CartRepositoryImpl(apiClient: Get.find()));
   Get.getOrPut<CartRepo>(() => CartRepoImpl(apiClient: Get.find()));
+  Get.getOrPut<PlaceOrderRepo>(() => PlaceOrderRepoImpl(apiClient: Get.find()));
 }
