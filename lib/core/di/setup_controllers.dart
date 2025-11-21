@@ -1,4 +1,5 @@
 import 'package:danielabake/core/utils/getx_helper.dart';
+import 'package:danielabake/features/Order_screen/controller/order_controller.dart';
 import 'package:danielabake/features/auth/controller/auth_controller.dart';
 import 'package:danielabake/features/home/controller/cart_controller.dart';
 import 'package:danielabake/features/home/controller/category_controller.dart';
@@ -14,4 +15,5 @@ void setupControllers() {
   Get.getOrPut(() => HomeController());
   Get.getOrPut(() => FavoriteFoodController());
   Get.getOrPut(() => AddToCartController());
+  Get.getOrPut(() => OrderController());
 }

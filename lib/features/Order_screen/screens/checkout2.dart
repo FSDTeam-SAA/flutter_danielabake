@@ -35,7 +35,7 @@ class _Checkout2ScreenState extends State<Checkout2Screen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-
+      removePadding: true,
       appBar: AppBar(
         title: const Text(
           'Checkout',
@@ -46,85 +46,93 @@ class _Checkout2ScreenState extends State<Checkout2Screen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          // The main container with address, phone, delivery
-          Padding(
-            padding: const EdgeInsets.only(top: 30.0),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              decoration: BoxDecoration(
-                color: const Color(0x2EFFB972),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildTile(
-                    imagePath: Images.address,
-                    title: "Home",
-                    child: TextFormField(
-                      controller: addressController,
-                      validator: Validators.name,
-                      decoration: const InputDecoration(
-                        hintText: "Enter address",
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  _divider(),
-                  _buildTile(
-                    imagePath: Images.phone,
-                    title: "Phone",
-                    child: TextFormField(
-                      validator: Validators.phone,
-                      keyboardType: TextInputType.phone,
-                      controller: phoneController,
-                      decoration: const InputDecoration(
-                        hintText: "+88 00-1111-2222",
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  _divider(),
-                  _buildTile(
-                    imagePath: Images.delivery,
-                    title: "Estimated Delivery Time",
-                    child: const Text(
-                      "2hr",
-                      style: TextStyle(fontSize: 14, color: Colors.grey),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          Spacer(),
-
-          // Button outside the container
-          SizedBox(
-            width: double.infinity,
-            child: Column(
-              children: [
-                Row(
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Color(0x2EFFB972), // full width to bottom
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20.0, left: 15, right: 15, bottom: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // important to avoid full-screen height
+            children: [
+              Obx(
+              ()=> Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Total", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
-                    Text("\$${orderController.category.value!.total.toStringAsFixed(2)}", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
+                    Text("\$${orderController.cart.value!.total.toStringAsFixed(2)}", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
                   ],
                 ),
-                SizedBox(
-                  height: 10,
-                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
 
-                PrimaryButton(text: 'Place Order', onApiPressed: () => _submit()),
-              ],
-            ),
+              PrimaryButton(text: 'Place Order', onApiPressed: () => _submit()),
+            ],
           ),
-        ],
+        ),
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            // The main container with address, phone, delivery
+            Padding(
+              padding: const EdgeInsets.only(top: 30.0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: const Color(0x2EFFB972),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildTile(
+                      imagePath: Images.address,
+                      title: "Home",
+                      child: TextFormField(
+                        controller: addressController,
+                        validator: Validators.name,
+                        decoration: const InputDecoration(
+                          hintText: "Enter address",
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    _divider(),
+                    _buildTile(
+                      imagePath: Images.phone,
+                      title: "Phone",
+                      child: TextFormField(
+                        validator: Validators.phone,
+                        keyboardType: TextInputType.phone,
+                        controller: phoneController,
+                        decoration: const InputDecoration(
+                          hintText: "+88 00-1111-2222",
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    _divider(),
+                    _buildTile(
+                      imagePath: Images.delivery,
+                      title: "Estimated Delivery Time",
+                      child: const Text(
+                        "2hr",
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

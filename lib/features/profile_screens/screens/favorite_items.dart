@@ -87,7 +87,7 @@ class _FavoriteItemsState extends State<FavoriteItems> {
                         // Call backend
                         await _favoriteController.removeFavorite(item.id);
                       }
-                    },
+                    }, description: '',
                   );
                 },
               );

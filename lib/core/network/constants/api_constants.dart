@@ -62,6 +62,7 @@ class ProfileEndpoints {
   String updateProfile(String userId) => '$_base/$userId';
   String fetchFavorite(String userId) => '${ApiConstants.baseUrl}/favorites/$userId';
   final String fetchOngoing = '${ApiConstants.baseUrl}/orders/my?filter=ongoing';
+  final String fetchDelivered = '${ApiConstants.baseUrl}/orders/my?filter=completed';
   // String fetchCategory(String userId) =>;
 }
 

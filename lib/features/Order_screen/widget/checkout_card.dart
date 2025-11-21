@@ -19,6 +19,7 @@ class CheckoutCard extends StatelessWidget {
     quantity.value = cartItem.quantity;
 
     final item = cartItem.item;
+
     final price = item.price;
 
     return Container(
@@ -122,7 +123,7 @@ class CheckoutCard extends StatelessWidget {
                           quantity.value++;
                           cartItem.quantity = quantity.value;
 
-                          controller.addCart(cartItem.item.id, quantity.value); // <-- API CALL
+                          controller.addCart(cartItem.item.id, 1); // <-- API CALL
                         },
                       ),
                     ],
@@ -136,7 +137,7 @@ class CheckoutCard extends StatelessWidget {
     );
   }
 
-  // Custom Figma-style round square button
+  // Custom round square button
   Widget _squareButton({required IconData icon, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,

@@ -21,7 +21,6 @@ class _OrderScreensState extends State<OrderScreens> {
   void initState() {
     super.initState();
     controller.fetchCart();
-    controller.fetchOrders(); // fetch orders from API
   }
 
   @override
@@ -43,11 +42,11 @@ class _OrderScreensState extends State<OrderScreens> {
           // Cart Items Section
           Expanded(
             child: Obx(() {
-              if (controller.order.value == null) {
+              if (controller.cart.value == null) {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              final cartItems = controller.category.value!.items;
+              final cartItems = controller.cart.value!.items;
 
               if (cartItems.isEmpty) {
                 return const Center(child: Text('Your cart is empty'));
@@ -65,8 +64,8 @@ class _OrderScreensState extends State<OrderScreens> {
 
           // Only show the button if there are items in the cart
           Obx(() {
-            if (controller.category.value != null &&
-                controller.category.value!.items.isNotEmpty) {
+            if (controller.cart.value != null &&
+                controller.cart.value!.items.isNotEmpty) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: PrimaryButton(

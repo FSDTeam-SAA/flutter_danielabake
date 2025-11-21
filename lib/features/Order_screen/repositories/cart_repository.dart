@@ -7,5 +7,6 @@ import '../../../core/network/network_result.dart';
 
 abstract class CartRepo{
   NetworkResult<GetCartResponseModel> fetchCart(String userId);
-  NetworkResult<GetOrderByIdResponseModel> fetchOrder();
+  NetworkResult<GetOrderByIdResponseModel> fetchOngoingOrder();
+  NetworkResult<GetOrderByIdResponseModel> fetchCompletedOrder();
 }

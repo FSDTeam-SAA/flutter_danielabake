@@ -16,6 +16,7 @@ class ProfileController extends BaseController {
 
   final Rxn<GetProfileResponseModel> userInfo = Rxn<GetProfileResponseModel>();
   final Rxn<OngoingOrderResponseModel> ongoingOrder = Rxn<OngoingOrderResponseModel>();
+  final Rxn<OngoingOrderResponseModel> completedOrder = Rxn<OngoingOrderResponseModel>();
   final MultiFormDataManager _multiFormDataManager = MultiFormDataManager();
   final favoriteItems = <GetFavoriteItemsResponseModel>[].obs;
 
@@ -149,6 +150,22 @@ class ProfileController extends BaseController {
       },
           (success) {
         ongoingOrder.value = success.data;
+        DPrint.log(success.message);
+      },
+    );
+  }
+
+  Future<void> fetchCompletedOrders() async {
+
+    final result = await _profileRepository.fetchCompletedOrder();
+
+    result.fold(
+          (fail) {
+        setError(fail.message);
+        DPrint.log('data fetch failed');
+      },
+          (success) {
+        completedOrder.value = success.data;
         DPrint.log(success.message);
       },
     );

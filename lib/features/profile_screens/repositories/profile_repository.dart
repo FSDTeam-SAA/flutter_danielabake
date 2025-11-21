@@ -18,6 +18,7 @@ abstract class ProfileRepository {
 //Change password
   NetworkResult<void> changePass(UpdatePasswordRequestModel request);
   NetworkResult<OngoingOrderResponseModel> fetchOngoingOrder();
+  NetworkResult<OngoingOrderResponseModel> fetchCompletedOrder();
   NetworkResult<List<GetFavoriteItemsResponseModel>> fetchFavoriteItems(String userId);
   // NetworkResult<Category> fetchCategory(String userId);
 //

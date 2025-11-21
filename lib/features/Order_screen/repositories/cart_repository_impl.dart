@@ -22,9 +22,17 @@ class CartRepoImpl implements CartRepo{
   }
 
   @override
-  NetworkResult<GetOrderByIdResponseModel> fetchOrder(){
+  NetworkResult<GetOrderByIdResponseModel> fetchOngoingOrder(){
     return _apiClient.get(
-      endpoint: ApiConstants.order.fetchOrder,
+      endpoint: ApiConstants.profile.fetchOngoing,
+      fromJsonT: (json) => GetOrderByIdResponseModel.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  NetworkResult<GetOrderByIdResponseModel> fetchCompletedOrder(){
+    return _apiClient.get(
+      endpoint: ApiConstants.profile.fetchDelivered,
       fromJsonT: (json) => GetOrderByIdResponseModel.fromJson(json as Map<String, dynamic>),
     );
   }

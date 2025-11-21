@@ -1,10 +1,9 @@
-import 'package:danielabake/features/profile_screens/controller/profile_controller.dart';
+import 'package:danielabake/core/common/widgets/app_scaffold.dart';
+import 'package:danielabake/features/Order_screen/controller/order_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../core/common/widgets/app_scaffold.dart';
-import '../models/response/ongoing_order_response_model.dart';
-import '../widgets/model/order_model.dart';
-import '../widgets/order_list.dart';
+
+import '../controller/profile_controller.dart';
 
 class MyOrdersScreen extends StatefulWidget {
   const MyOrdersScreen({super.key});
@@ -15,108 +14,296 @@ class MyOrdersScreen extends StatefulWidget {
 
 class _MyOrdersScreenState extends State<MyOrdersScreen>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  final ProfileController _profileController = Get.find<ProfileController>();
+  late TabController tabController;
+  final controller = Get.find<OrderController>();
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    _profileController.fetchOngoingOrders();
-  }
-
-  final completedOrders = [
-    OrderModel(
-      shopName: "Pizza Hut",
-      image: "assets/pizza.png",
-      orderId: "162290",
-      amount: 29.80,
-      itemsCount: 2,
-      isPaid: true,
-    ),
-  ];
-
-  List<OrderModel> mapOngoingOrders(OngoingOrderResponseModel data) {
-    return data.orders.map((order) {
-      // Take the first item as representative for image and shopName
-      final firstItem = order.items.isNotEmpty ? order.items[0].item : null;
-
-      return OrderModel(
-        shopName: firstItem?.name ?? 'Unknown Shop',
-        image: firstItem?.image.isNotEmpty == true
-            ? firstItem!.image
-            : 'https://via.placeholder.com/75',
-        orderId: order.id,
-        // Sum of all items for total amount
-        amount: order.items.fold<double>(
-            0, (sum, orderItem) => sum + orderItem.item.price * orderItem.quantity),
-        // Total quantity of all items
-        itemsCount: order.items.fold<int>(0, (sum, orderItem) => sum + orderItem.quantity),
-        isPaid: order.status.toLowerCase() == 'paid',
-      );
-    }).toList();
-  }
-
-
-
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+    tabController = TabController(length: 2, vsync: this);
+    controller.fetchOngoingOrders(); // fetch when screen opens
   }
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      removePadding: true,
+      backgroundColor: const Color(0xffFFF8E8), // same soft background
+
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: const Color(0xffFFF8E8),
+        centerTitle: true,
         title: const Text(
-          'My Orders',
+          "My Orders",
           style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-            color: Colors.black,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+              fontSize: 20
           ),
         ),
         bottom: TabBar(
-          controller: _tabController,
-          labelColor: const Color(0xFF7F3615),
-          unselectedLabelColor: Colors.grey,
-          labelStyle: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
+          controller: tabController,
+          // Custom indicator with color and size
+          indicator: UnderlineTabIndicator(
+            borderSide: BorderSide(width: 3.0, color: Color(0xFF7F3615)), // thickness & color
+            insets: EdgeInsets.symmetric(horizontal: -35), // smaller horizontal inset = longer line
           ),
-          indicator: const UnderlineTabIndicator(
-            borderSide: BorderSide(
-              width: 3.0,
-              color: Color(0xFF7F3615),
-            ),
-            insets: EdgeInsets.symmetric(horizontal: 120),
-          ),
+          labelColor: Color(0xFF7F3615),
+          labelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),// selected tab text color
+          unselectedLabelColor: Colors.grey, // unselected tab text color
           tabs: const [
             Tab(text: "Ongoing"),
             Tab(text: "Completed"),
           ],
         ),
       ),
+
+
       body: TabBarView(
-        controller: _tabController,
+        controller: tabController,
         children: [
-          // Use Obx to reactively listen to ongoing orders
-          Obx(() {
-    final ongoingData = _profileController.ongoingOrder.value;
+          /// First Tab - ONGOING
+          _ongoingList(),
 
-    if (ongoingData == null || ongoingData.orders.isEmpty) {
-    return const Center(child: Text("No ongoing orders"));
-    }
-
-    final orders = mapOngoingOrders(ongoingData);
-    return OrdersList(orders: orders);
-    }),
-
-
-    OrdersList(orders: completedOrders),
+          /// Second Tab - COMPLETED (empty for now)
+          _completList()
         ],
       ),
     );
   }
-}
+
+  ///ONGOING LIST (FROM API)
+  Widget _ongoingList() {
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      final data = controller.ongoingOrder.value;
+
+      if (data == null || data.orders.isEmpty) {
+        return const Center(child: Text("No Orders Found"));
+      }
+
+      final orders = data.orders;
+
+      return ListView.builder(
+        padding: const EdgeInsets.all(12),
+        itemCount: orders.length,
+        itemBuilder: (context, index) {
+          final order = orders[index];
+
+          return Container(
+            padding: const EdgeInsets.all(12),
+            margin: const EdgeInsets.only(bottom: 12),
+            decoration: BoxDecoration(
+              color: Colors.orange.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// Order ID & Payment Status
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("#${order.id.substring(order.id.length - 6)}",
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(
+                      order.status,
+                      style: TextStyle(
+                        color: order.status == "Paid"
+                            ? Colors.green
+                            : order.status == "Pending"
+                            ? Colors.grey
+                            : Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+
+                /// Items list
+                Column(
+                  children: order.items.map((orderItem) {
+                    final item = orderItem.item;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              item.image,
+                              height: 70,
+                              width: 70,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.name,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                Text(orderItem.quantity.toString())
+                              ],
+                            ),
+                          ),
+                          Text("\$${item.price.toStringAsFixed(2)}"),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8),
+                  child: const Divider(height: 20, thickness: 1, color: Color(0xFFAD653F),),
+                ),
+
+                /// Total amount & items count
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Total:  \$${order.totalAmount.toStringAsFixed(2)}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w500, fontSize: 16),
+                    ),
+                    const SizedBox(width: 10),
+                    Text("(${order.items.length} items)"),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    });
+  }
+
+
+  Widget _completList() {
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      final data = controller.completedOrder.value;
+
+      if (data == null || data.orders.isEmpty) {
+        return const Center(child: Text("No Orders Found"));
+      }
+
+      final orders = data.orders;
+
+      return ListView.builder(
+        padding: const EdgeInsets.all(12),
+        itemCount: orders.length,
+        itemBuilder: (context, index) {
+          final order = orders[index];
+
+          return Container(
+            padding: const EdgeInsets.all(12),
+            margin: const EdgeInsets.only(bottom: 12),
+            decoration: BoxDecoration(
+              color: Colors.orange.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// Order ID & Payment Status
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("#${order.id.substring(order.id.length - 6)}",
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(
+                      order.status,
+                      style: TextStyle(
+                        color: order.status == "Paid"
+                            ? Colors.green
+                            : order.status == "Pending"
+                            ? Colors.grey
+                            : Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+
+                /// Items list
+                Column(
+                  children: order.items.map((orderItem) {
+                    final item = orderItem.item;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              item.image,
+                              height: 70,
+                              width: 70,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.name,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                Text(orderItem.quantity.toString())
+                              ],
+                            ),
+                          ),
+                          Text("\$${item.price.toStringAsFixed(2)}"),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0, right: 8),
+                  child: const Divider(height: 20, thickness: 1, color: Color(0xFFAD653F),),
+                ),
+
+                /// Total amount & items count
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Total:  \$${order.totalAmount.toStringAsFixed(2)}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w500, fontSize: 16),
+                    ),
+                    const SizedBox(width: 10),
+                    Text("(${order.items.length} items)"),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    });
+  }
+  }
+
+
+
+

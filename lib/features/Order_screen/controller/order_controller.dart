@@ -15,8 +15,9 @@ class OrderController extends BaseController {
   final _placeOrderRepo = Get.find<PlaceOrderRepo>();
   final AuthStorageService _authStorageService = AuthStorageService();
 
-  final Rxn<GetCartResponseModel> category = Rxn<GetCartResponseModel>();
-  final Rxn<GetOrderByIdResponseModel> order = Rxn<GetOrderByIdResponseModel>();
+  final Rxn<GetCartResponseModel> cart = Rxn<GetCartResponseModel>();
+  final Rxn<GetOrderByIdResponseModel> ongoingOrder = Rxn<GetOrderByIdResponseModel>();
+  final Rxn<GetOrderByIdResponseModel> completedOrder = Rxn<GetOrderByIdResponseModel>();
 
   // final Rxn<OngoingOrderResponseModel> ongoingOrder = Rxn<OngoingOrderResponseModel>();
   // final MultiFormDataManager _multiFormDataManager = MultiFormDataManager();
@@ -25,7 +26,8 @@ class OrderController extends BaseController {
   void onInit() {
     super.onInit();
     fetchCart();
-    fetchOrders();
+    fetchOngoingOrders();
+    fetchCompletedOrders();
   }
 
   Future<void> fetchCart() async {
@@ -46,14 +48,14 @@ class OrderController extends BaseController {
         DPrint.log('Fetch Cart failed');
       },
       (success) {
-        category.value = success.data;
+        cart.value = success.data;
         DPrint.log(success.message);
       },
     );
   }
 
-  Future<void> fetchOrders() async {
-    final result = await _cartRepo.fetchOrder();
+  Future<void> fetchOngoingOrders() async {
+    final result = await _cartRepo.fetchOngoingOrder();
 
     result.fold(
       (fail) {
@@ -61,7 +63,21 @@ class OrderController extends BaseController {
       },
       (success) {
         DPrint.log("Raw order data: ${success.data}");
-        order.value = success.data;
+        ongoingOrder.value = success.data;
+      },
+    );
+  }
+
+  Future<void> fetchCompletedOrders() async {
+    final result = await _cartRepo.fetchCompletedOrder();
+
+    result.fold(
+      (fail) {
+        DPrint.log("Fetch Orders Failed: ${fail.message}");
+      },
+      (success) {
+        DPrint.log("Raw order data: ${success.data}");
+        completedOrder.value = success.data;
       },
     );
   }

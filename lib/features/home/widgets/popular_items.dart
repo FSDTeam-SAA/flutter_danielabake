@@ -7,6 +7,7 @@ import '../controller/favorite_food_controller.dart';
 class FoodCard extends StatelessWidget {
   final String imagePath;
   final String title;
+  final String description;
   final String price;
   final String itemId;
   final RxBool isFavorite; // Observable
@@ -17,6 +18,7 @@ class FoodCard extends StatelessWidget {
     super.key,
     required this.imagePath,
     required this.title,
+    required this.description,
     required this.price,
     required this.itemId,
     required this.isFavorite,
@@ -90,12 +92,25 @@ class FoodCard extends StatelessWidget {
           // Title
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                ),
+
+                Text(
+                  description,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
             ),
           ),
 

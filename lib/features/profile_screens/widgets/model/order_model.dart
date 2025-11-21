@@ -1,17 +1,17 @@
 class OrderModel {
-  final String shopName;
-  final String image;
+  final String restaurantName;
   final String orderId;
-  final double amount;
-  final int itemsCount;
+  final String image;
+  final double price;
+  final int totalItems;
   final bool isPaid;
 
   OrderModel({
-    required this.shopName,
-    required this.image,
+    required this.restaurantName,
     required this.orderId,
-    required this.amount,
-    required this.itemsCount,
+    required this.image,
+    required this.price,
+    required this.totalItems,
     required this.isPaid,
   });
 }

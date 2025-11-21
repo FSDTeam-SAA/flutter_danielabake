@@ -21,8 +21,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   NetworkResult<GetProfileResponseModel> fetchProfile(String userId){
-    return _apiClient.get(endpoint: ApiConstants.profile.fetchProfile(userId), fromJsonT: (json) =>
-        GetProfileResponseModel.fromJson(json as Map<String, dynamic>),
+    return _apiClient.get(endpoint: ApiConstants.profile.fetchProfile(userId),
+      fromJsonT: (json) => GetProfileResponseModel.fromJson(json as Map<String, dynamic>),
     );
   }
 
@@ -36,27 +36,15 @@ NetworkResult<List<GetFavoriteItemsResponseModel>> fetchFavoriteItems(String use
   NetworkResult<OngoingOrderResponseModel> fetchOngoingOrder() {
     return _apiClient.get(
       endpoint: ApiConstants.profile.fetchOngoing,
-      fromJsonT: (json) {
-        final data = json['data'] as Map<String, dynamic>?;
+      fromJsonT: (json) => OngoingOrderResponseModel.fromJson(json as Map<String, dynamic>),
+    );
+  }
 
-        // Extract total, page, pages
-        final total = data?['total'] as int? ?? 0;
-        final page = data?['page'] as int? ?? 1;
-        final pages = data?['pages'] as int? ?? 1;
-
-        // Extract orders
-        final ordersJson = data?['orders'] as List<dynamic>? ?? [];
-        final orders = ordersJson
-            .map((e) => Order.fromJson(e as Map<String, dynamic>))
-            .toList();
-
-        return OngoingOrderResponseModel(
-          total: total,
-          page: page,
-          pages: pages,
-          orders: orders,
-        );
-      },
+  @override
+  NetworkResult<OngoingOrderResponseModel> fetchCompletedOrder(){
+    return _apiClient.get(
+      endpoint: ApiConstants.profile.fetchDelivered,
+      fromJsonT: (json) => OngoingOrderResponseModel.fromJson(json as Map<String, dynamic>),
     );
   }
 
