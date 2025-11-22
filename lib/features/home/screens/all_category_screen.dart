@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../controller/category_controller.dart';
 import '../widgets/category_card.dart';
 import '../../../core/common/widgets/app_scaffold.dart';
+import 'food_item_by_category.dart';
 
 class AllCategoryScreen extends StatelessWidget {
   const AllCategoryScreen({super.key});
@@ -68,8 +69,15 @@ class AllCategoryScreen extends StatelessWidget {
                   return CategoryCard(
                     title: cat.name,
                     imageUrl: cat.image,
-                    bgColor: Colors.pink.shade100, // Same as horizontal version
+                    bgColor: Colors.pink.shade100,
+                    onTap: () {
+                      Get.to(() => FoodListScreen(
+                        categoryId: cat.id,
+                        categoryName: cat.name,
+                      ));
+                    },
                   );
+
                 },
               ),
             ),

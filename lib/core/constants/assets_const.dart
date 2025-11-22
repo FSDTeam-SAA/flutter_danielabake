@@ -10,7 +10,7 @@ class Images {
 
   //Images
   final  String azloLogoImage = "$_base/app_logo.png";
-  static const String background = '$_base/img4.png';
+  static const String background = '$_base/background.jpg';
   static const String cookie1 = '$_base/img3.jpg';
   static const String cookie2 = '$_base/image2.jpg';
   static const String cookie3 = '$_base/image1.jpg';

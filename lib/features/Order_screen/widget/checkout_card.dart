@@ -10,6 +10,7 @@ class CheckoutCard extends StatelessWidget {
 
   // Reactive quantity
   final RxInt quantity = 0.obs;
+  final RxInt quantity1 = 0.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +98,7 @@ class CheckoutCard extends StatelessWidget {
                             quantity.value--;
                             cartItem.quantity = quantity.value;
 
-                            controller.removeCart(cartItem.item.id); // <-- API CALL
+                            controller.removeOneItemFromCart(cartItem.item.id); // <-- API CALL
                           }
                         },
                       ),
@@ -123,7 +124,7 @@ class CheckoutCard extends StatelessWidget {
                           quantity.value++;
                           cartItem.quantity = quantity.value;
 
-                          controller.addCart(cartItem.item.id, 1); // <-- API CALL
+                          controller.addCart(cartItem.item.id, quantity1.value); // <-- API CALL
                         },
                       ),
                     ],

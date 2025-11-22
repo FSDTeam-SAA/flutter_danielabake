@@ -68,12 +68,13 @@ class ProfileEndpoints {
 
 class HomeEndpoints {
   final String category = '${ApiConstants.baseUrl}/categories';
+   String items(String categoryId) => '${ApiConstants.baseUrl}/items?category=$categoryId';
   final String favorite = '${ApiConstants.baseUrl}/favorites';
   final String removeFavorite = '${ApiConstants.baseUrl}/favorites';
   final String popular = '${ApiConstants.baseUrl}/items';
   final String addCart = '${ApiConstants.baseUrl}/cart/add';
   final String removeCart = '${ApiConstants.baseUrl}/cart/remove';
-  // String fetchCategory(String userId) =>;
+  final String removeOneCart = '${ApiConstants.baseUrl}/cart/reduce';
 }
 
 class OrderEndpoints {

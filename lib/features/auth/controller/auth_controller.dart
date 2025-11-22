@@ -6,7 +6,7 @@ import 'package:danielabake/features/auth/models/request/forgot_password_request
 import 'package:danielabake/features/auth/models/request/verify_otp_request_model.dart';
 import 'package:danielabake/features/auth/screens/create_new_password_screen.dart';
 import 'package:danielabake/features/auth/screens/verify_code_screen.dart';
-import 'package:danielabake/features/splash_screen/screens/splash_screen.dart';
+import 'package:danielabake/features/splash_screen/screens/first_screen.dart';
 import 'package:danielabake/navigation_menu.dart';
 import 'package:flutx_core/core/debug_print.dart';
 import 'package:danielabake/features/auth/repositories/auth_repository.dart';
@@ -43,7 +43,7 @@ class AuthController extends BaseController {
       },
       (success) {
         DPrint.log("Register success result : ${success.data.id}");
-        Get.to(SplashScreen());
+        Get.to(FirstScreen());
         setLoading(false);
       },
     );
@@ -202,6 +202,6 @@ class AuthController extends BaseController {
   //
   Future<void> logout() async {
     await _authStorageService.clearAuthData();
-    Get.offAll(() => LoginScreen());
+    Get.offAll(() => FirstScreen());
   }
 }

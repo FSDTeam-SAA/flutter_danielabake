@@ -7,7 +7,7 @@ import 'package:danielabake/features/home/controller/favorite_food_controller.da
 import 'package:danielabake/features/home/controller/home_controller.dart';
 import 'package:danielabake/features/home/screens/all_category_screen.dart';
 import 'package:danielabake/features/home/screens/all_popular_items.dart';
-import 'package:danielabake/features/home/screens/category_screen.dart';
+import 'package:danielabake/features/home/widgets/category_section.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

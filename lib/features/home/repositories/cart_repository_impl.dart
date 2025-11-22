@@ -24,6 +24,15 @@ class CartRepositoryImpl implements CartRepository {
     );
   }
 
+  @override
+  NetworkResult<RemoveCartResponseModel> removeOneCartItem(RemoveCartRequestModel request, String userId, String itemId){
+    return _apiClient.put(
+      endpoint: ApiConstants.home.removeOneCart,
+      data: request.toJson(),
+      fromJsonT: (json) => RemoveCartResponseModel.fromJson(json),
+    );
+  }
+
 
   @override
   NetworkResult<void> removeCart(RemoveCartRequestModel request, String userId, String itemId){
@@ -33,4 +42,5 @@ class CartRepositoryImpl implements CartRepository {
       fromJsonT: (json) {},
     );
   }
+
 }

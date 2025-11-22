@@ -77,56 +77,6 @@ class _OrderScreensState extends State<OrderScreens> {
               return const SizedBox.shrink(); // empty space if no items
             }
           }),
-          // Ordered Items header
-          // Padding(
-          //   padding: const EdgeInsets.only(bottom: 10),
-          //   child: TextWithViewAllButton(
-          //     text: 'Ordered Items',
-          //     onTap: () {},
-          //   ),
-          // ),
-          //
-          // // Orders List
-          // // Orders List
-          // Obx(() {
-          //   if (controller.isLoading.value) {
-          //     return const Center(child: CircularProgressIndicator());
-          //   }
-          //
-          //   if (controller.order.value == null || controller.order.value!.orders.isEmpty) {
-          //     return const Center(child: Text("No Orders Found"));
-          //   }
-          //
-          //   final orders = controller.order.value!.orders;
-          //
-          //   return Expanded(
-          //     child: ListView.builder(
-          //       itemCount: orders.length,
-          //       itemBuilder: (context, orderIndex) {
-          //         final order = orders[orderIndex];
-          //
-          //         return Column(
-          //           crossAxisAlignment: CrossAxisAlignment.start,
-          //           children: [
-          //             ListView.builder(
-          //               shrinkWrap: true,
-          //               physics: const NeverScrollableScrollPhysics(),
-          //               itemCount: order.items.length,
-          //               itemBuilder: (context, itemIndex) {
-          //                 final orderedItem = order.items[itemIndex];
-          //                 return OrderedItemCard(
-          //                   orderItem: orderedItem,
-          //                   address: order.address,
-          //                   status: order.status,
-          //                 );
-          //               },
-          //             ),
-          //           ],
-          //         );
-          //       },
-          //     ),
-          //   );
-          // })
         ],
       ),
     );

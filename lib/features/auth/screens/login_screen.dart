@@ -18,7 +18,9 @@ import '../../../core/theme/app_colors.dart';
 import '../controller/remember_me_controller.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({super.key,  this.password,  this.email});
+  final String? password;
+  final String? email;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -37,6 +39,15 @@ class _LoginScreenState extends State<LoginScreen> {
   final rememberMeController = Get.put(RememberMeController());
 
   final _authCtrl = Get.find<AuthController>();
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.text = widget.email ?? '';
+    _passwordController.text = widget.password ?? '';
+  }
+
+
 
   @override
   void dispose() {

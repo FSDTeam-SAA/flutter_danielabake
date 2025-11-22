@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controller/category_controller.dart';
-import '../widgets/category_card.dart';
+import 'category_card.dart';
 
 class CategorySection extends StatelessWidget {
   const CategorySection({super.key});

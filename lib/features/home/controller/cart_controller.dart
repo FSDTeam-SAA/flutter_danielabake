@@ -68,4 +68,34 @@ class AddToCartController extends BaseController {
       },
     );
   }
+
+  Future<void> removeOneItemFromCart(String itemId)async{
+    final userId = await _authStorageService.getUserId();
+    DPrint.log('UserId: $userId');
+    if (userId == null || userId.isEmpty) {
+      setError('User ID not found. Please log in again.');
+      Get.snackbar('Error', 'User ID not found. Please log in again.');
+      setLoading(false);
+      return;
+    }
+    final request = RemoveCartRequestModel(userId: userId, itemId: itemId);
+    final result = await _addCartRepo.removeCart(request, userId, itemId);
+
+    result.fold(
+          (fail) {
+        setError(fail.message);
+        DPrint.log("Favorite success result : ${fail.message}");
+        setLoading(false);
+      },
+          (success) {
+        DPrint.log("Favorite success result : ${success.message}");
+        Get.snackbar(
+          "Success",
+          "Item removed from favorites",
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        setLoading(false);
+      },
+    );
+  }
 }

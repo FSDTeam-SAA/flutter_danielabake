@@ -1,44 +1,52 @@
-class RemoveCartResponse {
+class RemoveCartResponseModel {
   final String id;
   final String user;
-  final List<CartRemovedItem> items;
-  final int total;
+  final List<CartItem> items;
+  final double total;
+  final String createdAt;
+  final String updatedAt;
+  final int v;
 
-  RemoveCartResponse({
+  RemoveCartResponseModel({
     required this.id,
     required this.user,
     required this.items,
     required this.total,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.v,
   });
 
-  factory RemoveCartResponse.fromJson(Map<String, dynamic> json) {
-    return RemoveCartResponse(
-      id: json['_id'],
-      user: json['user'],
-      items: (json['items'] as List)
-          .map((e) => CartRemovedItem.fromJson(e))
-          .toList(),
-      total: json['total'],
+  factory RemoveCartResponseModel.fromJson(Map<String, dynamic> json) {
+    return RemoveCartResponseModel(
+      id: json["_id"],
+      user: json["user"],
+      items: List<CartItem>.from(
+          json["items"].map((x) => CartItem.fromJson(x))),
+      total: json["total"]?.toDouble() ?? 0.0,
+      createdAt: json["createdAt"],
+      updatedAt: json["updatedAt"],
+      v: json["__v"],
     );
   }
 }
 
-class CartRemovedItem {
-  final String id;
+class CartItem {
   final String item;
   final int quantity;
+  final String id;
 
-  CartRemovedItem({
-    required this.id,
+  CartItem({
     required this.item,
     required this.quantity,
+    required this.id,
   });
 
-  factory CartRemovedItem.fromJson(Map<String, dynamic> json) {
-    return CartRemovedItem(
-      id: json['_id'],
-      item: json['item'],
-      quantity: json['quantity'],
+  factory CartItem.fromJson(Map<String, dynamic> json) {
+    return CartItem(
+      item: json["item"],
+      quantity: json["quantity"],
+      id: json["_id"],
     );
   }
 }

@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 
 import '../../../core/common/widgets/app_scaffold.dart';
 import '../../../core/utils/app_svg.dart';
-import '../../Order_screen/models/response/get_cart_response_model.dart';
 import '../controller/cart_controller.dart';
 import '../widgets/ingredients_list.dart';
 import '../widgets/models/detail_food_model.dart';
@@ -58,57 +57,59 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
             () => Container(
           color: const Color(0x2EFFB972),
           padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('\$${widget.food.price}',
-                      style: const TextStyle(
-                          fontSize: 22, fontWeight: FontWeight.bold)),
-                  Row(
-                    children: [
-                      _squareButton(
-                        icon: Icons.remove,
-                        onTap: () {
-                          if (quantity.value <= 0) return;
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('\$${widget.food.price}',
+                        style: const TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold)),
+                    Row(
+                      children: [
+                        _squareButton(
+                          icon: Icons.remove,
+                          onTap: () {
+                            if (quantity.value <= 0) return;
 
-                          quantity.value--;
-                          _cartController.removeCart(widget.food.id);
-
-                          /// refresh cart after removing
-                          _orderController.fetchCart();
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: Text('${quantity.value}',
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w500)),
-                      ),
-                      _squareButton(
-                        icon: Icons.add,
-                        onTap: () {
-                          quantity.value++;
-
-                          /// call add API
-                          _cartController.addCart(widget.food.id, 1);
-
-                          /// refresh cart after adding
-                          _orderController.fetchCart();
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 15),
-              PrimaryButton(
-                text: 'Place Order',
-                onSimplePressed: () => Get.to(() => Checkout2Screen()),
-              )
-            ],
+                            quantity.value--;
+                            _cartController.removeOneItemFromCart(widget.food.id);
+            
+                            /// refresh cart after removing
+                            _orderController.fetchCart();
+                          },
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Text('${quantity.value}',
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w500)),
+                        ),
+                        _squareButton(
+                          icon: Icons.add,
+                          onTap: () {
+                            quantity.value++;
+            
+                            /// call add API
+                            _cartController.addCart(widget.food.id, 1);
+            
+                            /// refresh cart after adding
+                            _orderController.fetchCart();
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 15),
+                PrimaryButton(
+                  text: 'Place Order',
+                  onSimplePressed: () => Get.to(() => Checkout2Screen()),
+                )
+              ],
+            ),
           ),
         ),
       ),

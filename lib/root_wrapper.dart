@@ -3,7 +3,7 @@ import 'package:danielabake/navigation_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../features/auth/controller/auth_controller.dart';
-import '../../features/splash_screen/screens/splash_screen.dart';
+import '../../features/splash_screen/screens/first_screen.dart';
 
 class RootWrapper extends StatelessWidget {
   RootWrapper({super.key});
@@ -32,7 +32,7 @@ class RootWrapper extends StatelessWidget {
         }
 
         /// Otherwise → go to splash screen
-        return const SplashScreen();
+        return const FirstScreen();
       },
     );
   }

@@ -5,14 +5,17 @@ import 'package:danielabake/features/auth/screens/login_screen.dart';
 import 'package:danielabake/features/auth/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../core/common/widgets/elevated_button.dart' show PrimaryButton, SecondaryButton;
+import '../../../core/common/widgets/elevated_button.dart'
+    show PrimaryButton, SecondaryButton;
+import '../../../core/network/services/secure_store_services.dart';
+import '../controller/first_screen_controller.dart';
 
-
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+class FirstScreen extends StatelessWidget {
+  const FirstScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Get.put(FirstScreenController()); // Initialize the controller
 
     final size = MediaQuery.of(context).size;
 
@@ -56,7 +59,6 @@ class SplashScreen extends StatelessWidget {
               child: _buildDiamondImage(Images.cookie3, 160),
             ),
 
-            /// These buttons will only be visible if user is not logged in
             Positioned(
               bottom: 120,
               left: 16,
@@ -73,19 +75,28 @@ class SplashScreen extends StatelessWidget {
               left: 16,
               right: 16,
               child: SecondaryButton(
-                onTap: () => Get.to(() => LoginScreen()),
+                onTap: () async {
+                  final secureStore = SecureStoreServices();
+                  final savedEmail = await secureStore.retrieveData("email");
+                  final savedPassword = await secureStore.retrieveData("password");
+
+                  Get.to(() => LoginScreen(
+                    email: savedEmail,
+                    password: savedPassword,
+                  ));
+                },
                 label: 'Login',
                 width: double.infinity,
                 height: 50,
               ),
             ),
+
           ],
         ),
       ),
     );
   }
 
-  // Helper Widget to make images diamond-shaped
   Widget _buildDiamondImage(String imagePath, double size) {
     return Transform.rotate(
       angle: pi / 4,
