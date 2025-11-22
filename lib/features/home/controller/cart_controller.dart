@@ -79,7 +79,7 @@ class AddToCartController extends BaseController {
       return;
     }
     final request = RemoveCartRequestModel(userId: userId, itemId: itemId);
-    final result = await _addCartRepo.removeCart(request, userId, itemId);
+    final result = await _addCartRepo.removeOneCartItem(request, userId, itemId);
 
     result.fold(
           (fail) {

@@ -56,13 +56,13 @@ class NavigationMenu extends StatelessWidget {
                     color: isSelected
                         ? const Color(0xFF1B76FF).withOpacity(0.82)
                         : const Color(0xFFE89208).withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(50),
+                    borderRadius: BorderRadius.circular(150),
                   ),
 
                   child: Row(
                     children: [
                       AnimatedScale(
-                        scale: isSelected ? 1.15 : 1.0,
+                        scale: isSelected ? 1 : 1.0,
                         duration: const Duration(milliseconds: 220),
                         child: AppSvg(
                           asset: item['icon'],

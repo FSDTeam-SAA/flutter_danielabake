@@ -108,8 +108,8 @@ class _MyOrdersScreenState extends State<MyOrdersScreen>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("#${order.id.substring(order.id.length - 6)}",
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text("Order Id: #${order.id.substring(order.id.length - 6)}",
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
                     Text(
                       order.status,
                       style: TextStyle(
@@ -223,8 +223,8 @@ class _MyOrdersScreenState extends State<MyOrdersScreen>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("#${order.id.substring(order.id.length - 6)}",
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text("Order Id: #${order.id.substring(order.id.length - 6)}",
+                        style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
                     Text(
                       order.status,
                       style: TextStyle(
