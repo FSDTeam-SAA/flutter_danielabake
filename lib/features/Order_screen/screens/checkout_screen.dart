@@ -37,9 +37,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             fontSize: 18,
           ),
         ),
-        actions: const [
-          Padding(padding: EdgeInsets.only(right: 30.0), child: AppBarSearch()),
-        ],
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(

@@ -1,4 +1,5 @@
 import 'package:danielabake/core/base/base_controller.dart';
+import 'package:danielabake/core/network/constants/key_constants.dart';
 import 'package:danielabake/core/network/models/refresh_token_request_model.dart';
 import 'package:danielabake/features/auth/controller/remember_me_controller.dart';
 import 'package:danielabake/features/auth/models/request/create_new_password_request_model.dart';
@@ -199,9 +200,11 @@ class AuthController extends BaseController {
     );
     return navi;
   }
+  final SecureStoreServices _secureStoreServices = SecureStoreServices();
   //
   Future<void> logout() async {
     await _authStorageService.clearAuthData();
+    await _secureStoreServices.deleteData(KeyConstants.conversationId);
     Get.offAll(() => FirstScreen());
   }
 }

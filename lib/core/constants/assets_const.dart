@@ -42,6 +42,7 @@ class Images {
   static const String pappers = '$_base1/pappers.svg';
   static const String salt = '$_base1/salt.svg';
   static const String walnut = '$_base1/walnut.svg';
+  static const String msg = '$_base1/msg.svg';
 }
 
 class Videos {

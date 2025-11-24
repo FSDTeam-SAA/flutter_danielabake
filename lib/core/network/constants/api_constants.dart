@@ -1,6 +1,6 @@
 class ApiConstants {
   /// [Base Configuration]
-  static const String baseDomain = 'http://10.10.5.33:5001'; // eshita
+  static const String baseDomain = 'http://10.10.5.33:5002'; // eshita
   //static const String baseDomain = 'https://api.azlotv.com'; // Publish
   // static const String baseDomain = 'http://18.116.214.151'; /// [AWS]
   // static const String baseDomain = 'http://192.168.0.218:8000';
@@ -39,6 +39,7 @@ class ApiConstants {
   static ProfileEndpoints get profile => ProfileEndpoints();
   static HomeEndpoints get home => HomeEndpoints();
   static OrderEndpoints get order => OrderEndpoints();
+  static ChatEndpoints get chat => ChatEndpoints();
 
 }
 
@@ -69,6 +70,7 @@ class ProfileEndpoints {
 class HomeEndpoints {
   final String category = '${ApiConstants.baseUrl}/categories';
    String items(String categoryId) => '${ApiConstants.baseUrl}/items?category=$categoryId';
+   String searchItem(String text) => '${ApiConstants.baseUrl}/items?search=$text';
   final String favorite = '${ApiConstants.baseUrl}/favorites';
   final String removeFavorite = '${ApiConstants.baseUrl}/favorites';
   final String popular = '${ApiConstants.baseUrl}/items';
@@ -84,3 +86,10 @@ class OrderEndpoints {
   // String fetchCategory(String userId) =>;
 }
 
+class ChatEndpoints {
+  String sendMsg(String conversationId) => '${ApiConstants.baseUrl}/chat/messages/$conversationId';
+  String getAdmin = '${ApiConstants.baseUrl}/users/admin';
+  String createConversation = '${ApiConstants.baseUrl}/chat/conversations';
+  String getAllMsg(String conversationId) => '${ApiConstants.baseUrl}/chat/messages/$conversationId';
+  // String fetchCategory(String userId) =>;
+}

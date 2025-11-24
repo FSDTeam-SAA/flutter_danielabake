@@ -69,7 +69,7 @@ class AllCategoryScreen extends StatelessWidget {
                   return CategoryCard(
                     title: cat.name,
                     imageUrl: cat.image,
-                    bgColor: Colors.pink.shade100,
+                    bgColor: Color(cat.bgColor),
                     onTap: () {
                       Get.to(() => FoodListScreen(
                         categoryId: cat.id,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controller/category_controller.dart';
+import '../screens/food_item_by_category.dart';
 import 'category_card.dart';
 
 class CategorySection extends StatelessWidget {
@@ -37,6 +38,12 @@ class CategorySection extends StatelessWidget {
               title: cat.name,
               imageUrl: cat.image,
               bgColor: Color(cat.bgColor),
+              onTap: () {
+                Get.to(() => FoodListScreen(
+                  categoryId: cat.id,
+                  categoryName: cat.name,
+                ));
+              },
             );
           },
         ),

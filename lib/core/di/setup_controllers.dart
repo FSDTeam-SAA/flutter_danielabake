@@ -8,6 +8,8 @@ import 'package:danielabake/features/home/controller/home_controller.dart';
 import 'package:danielabake/features/profile_screens/controller/profile_controller.dart';
 import 'package:get/get.dart';
 
+import '../../features/chat_screen/controller/message_controller.dart';
+
 void setupControllers() {
   Get.getOrPut(() => AuthController());
   Get.getOrPut(() => ProfileController());
@@ -16,4 +18,5 @@ void setupControllers() {
   Get.getOrPut(() => FavoriteFoodController());
   Get.getOrPut(() => AddToCartController());
   Get.getOrPut(() => OrderController());
+  Get.getOrPut(() => MessageController());
 }

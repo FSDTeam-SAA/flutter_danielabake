@@ -21,7 +21,7 @@ class SocketClient {
 
   final AuthStorageService _authStorage = AuthStorageService();
   final ApiClient _apiClient = Get.find<ApiClient>();
-  String get _wsUrl => ApiConstants.baseDomain;
+  String get _wsUrl => ApiConstants.webSocketUrl;
 
   io.Socket? _socket;
   bool _manualDisconnect = false;

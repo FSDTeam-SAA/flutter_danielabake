@@ -109,7 +109,7 @@ class NavigationController extends GetxController {
   final List<Widget> screens = [
     const HomeScreen(),
      OrderScreens(),
-    const ChatScreens(),
+     ChatScreen(),
     const ProfileScreen(),
   ];
 }
