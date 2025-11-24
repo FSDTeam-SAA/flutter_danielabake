@@ -1,7 +1,7 @@
 class ApiConstants {
   /// [Base Configuration]
-  static const String baseDomain = 'http://10.10.5.33:5002'; // eshita
-  //static const String baseDomain = 'https://api.azlotv.com'; // Publish
+ // static const String baseDomain = 'http://10.10.5.33:5002'; // eshita
+  static const String baseDomain = 'https://daniela-bake-backend.onrender.com'; // Publish
   // static const String baseDomain = 'http://18.116.214.151'; /// [AWS]
   // static const String baseDomain = 'http://192.168.0.218:8000';
   //static const String baseDomain = 'http://192.168.0.106:5001';///eshitas laptop
