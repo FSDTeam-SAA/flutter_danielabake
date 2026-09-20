@@ -1,5 +1,6 @@
 import 'package:danielabake/core/common/widgets/app_scaffold.dart';
 import 'package:danielabake/core/common/widgets/button_widgets.dart';
+import 'package:danielabake/features/Order_screen/screens/checkout2.dart';
 import 'package:danielabake/features/Order_screen/screens/checkout_screen.dart';
 import 'package:danielabake/features/Order_screen/widget/cart_card.dart';
 import 'package:flutter/material.dart';
@@ -98,9 +99,9 @@ class _OrderScreensState extends State<OrderScreens> {
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: PrimaryButton(
-                  text: 'Place Order',
+                  text: 'Continue to Checkout',
                   key: Key("order-screen"),
-                  onSimplePressed: () => Get.to(() => CheckoutScreen()),
+                  onSimplePressed: () => Get.to(() => Checkout2Screen()),
                 ),
               );
             }
