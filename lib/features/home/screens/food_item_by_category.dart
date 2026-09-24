@@ -1,11 +1,7 @@
-import 'dart:developer' as DPrint;
-
 import 'package:danielabake/features/home/controller/category_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../Order_screen/controller/order_controller.dart';
-import '../controller/cart_controller.dart';
-import '../controller/favorite_food_controller.dart';
 import '../widgets/models/detail_food_model.dart';
 import '../widgets/popular_items.dart';
 import 'food_details_screen.dart'; // <-- make sure path is correct
@@ -14,7 +10,7 @@ class FoodListScreen extends StatefulWidget {
   final String categoryId;
   final String categoryName;
 
-  FoodListScreen({
+  const FoodListScreen({
     super.key,
     required this.categoryId,
     required this.categoryName,
@@ -25,7 +21,6 @@ class FoodListScreen extends StatefulWidget {
 }
 
 class _FoodListScreenState extends State<FoodListScreen> {
-  final _favoriteFoodController = Get.find<FavoriteFoodController>();
   final _cartController = Get.find<OrderController>();
   final controller = Get.put(CategoryController());
   // create controller if not exists
@@ -40,12 +35,9 @@ class _FoodListScreenState extends State<FoodListScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.sizeOf(context);
     final width = size.width;
     final height = size.height;
-
-    double font(double v) => v * (width / 390);
 
     int gridCount = width > 900
         ? 4
@@ -103,6 +95,7 @@ class _FoodListScreenState extends State<FoodListScreen> {
                         ingredients: food.ingredients,
                         price: food.price.toString(),
                         id: food.id,
+                        images: food.images,
                         //rating: food.rating, reviewsCount: food.reviewsCount,
                       ),
                     ),

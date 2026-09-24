@@ -256,7 +256,7 @@ class _Checkout2ScreenState extends State<Checkout2Screen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Total",
+                      "Subtotal",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,

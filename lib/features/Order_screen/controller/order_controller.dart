@@ -1,11 +1,10 @@
-import 'dart:developer' as DPrint;
+import 'dart:developer' as d_print;
 import 'package:danielabake/features/Order_screen/models/request/place_order_request_model.dart';
 import 'package:danielabake/features/Order_screen/models/request/re_order_request_model.dart';
 import 'package:danielabake/features/Order_screen/models/response/get_cart_response_model.dart';
 import 'package:danielabake/features/Order_screen/models/response/get_order_by_id_response_model.dart';
 import 'package:danielabake/features/Order_screen/repositories/cart_repository.dart';
 import 'package:danielabake/features/Order_screen/repositories/place_order_repo.dart';
-import 'package:danielabake/features/home/screens/home_screen.dart';
 import 'package:danielabake/navigation_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,7 +41,7 @@ class OrderController extends BaseController {
 
   Future<void> fetchCart() async {
     final userId = await _authStorageService.getUserId();
-    // DPrint.log('UserId: $userId');
+    // d_print.log('UserId: $userId');
     if (userId == null || userId.isEmpty) {
       setError('User ID not found. Please log in again.');
       // Get.snackbar('Error', 'User ID not found. Please log in again.');
@@ -55,11 +54,11 @@ class OrderController extends BaseController {
     result.fold(
       (fail) {
         setError(fail.message);
-        DPrint.log('Fetch Cart failed');
+        d_print.log('Fetch Cart failed');
       },
       (success) {
         cart.value = success.data;
-        DPrint.log(success.message);
+        d_print.log(success.message);
       },
     );
   }
@@ -109,7 +108,7 @@ class OrderController extends BaseController {
     final currentCart = cart.value;
     bool isNewItem = false;
     CartItem? newItemMock;
-    
+
     if (currentCart != null) {
       final existingItem = currentCart.items.firstWhereOrNull(
         (e) => e.item?.id == itemId,
@@ -120,7 +119,13 @@ class OrderController extends BaseController {
         isNewItem = true;
         newItemMock = CartItem(
           id: 'temp_id',
-          item: ItemDetails(id: itemId, name: 'Loading...', description: '', price: 0, image: ''),
+          item: ItemDetails(
+            id: itemId,
+            name: 'Loading...',
+            description: '',
+            price: 0,
+            image: '',
+          ),
           quantity: quantity,
         );
         currentCart.items.add(newItemMock);
@@ -155,7 +160,7 @@ class OrderController extends BaseController {
             if (existingItem != null) {
               existingItem.quantity -= quantity;
               if (existingItem.quantity <= 0) {
-                 currentCart.items.remove(existingItem);
+                currentCart.items.remove(existingItem);
               }
             }
           }
@@ -179,7 +184,7 @@ class OrderController extends BaseController {
 
   Future<void> retryAddCartAfterLogin() async {
     if (_pendingItemId != null && _pendingItemQuantity != null) {
-      DPrint.log("Retrying pending cart item: $_pendingItemId");
+      d_print.log("Retrying pending cart item: $_pendingItemId");
       final success = await addCart(_pendingItemId!, _pendingItemQuantity!);
       if (success) {
         // Get.snackbar(
@@ -245,20 +250,22 @@ class OrderController extends BaseController {
       },
       (success) {
         // API succeeded → already removed optimistically → do nothing
-        DPrint.log("Item removed from server successfully");
+        d_print.log("Item removed from server successfully");
       },
     );
   }
 
   Future<void> removeOneItemFromCart(String itemId) async {
     final userId = await _authStorageService.getUserId();
-    DPrint.log('UserId: $userId');
+    d_print.log('UserId: $userId');
     if (userId == null || userId.isEmpty) {
       setError('User ID not found. Please log in again.');
       Get.snackbar('Error', 'User ID not found. Please log in again.');
       setLoading(false);
       return;
     }
+
+    setLoading(true);
 
     // --- Optimistic Update ---
     final currentCart = cart.value;
@@ -298,24 +305,24 @@ class OrderController extends BaseController {
         // --- Revert Optimistic Update ---
         if (currentCart != null) {
           if (wasRemoved && removedItemCopy != null) {
-             currentCart.items.add(removedItemCopy);
+            currentCart.items.add(removedItemCopy);
           } else {
-             final existingItem = currentCart.items.firstWhereOrNull(
-               (e) => e.item?.id == itemId,
-             );
-             if (existingItem != null) {
-                existingItem.quantity += 1;
-             }
+            final existingItem = currentCart.items.firstWhereOrNull(
+              (e) => e.item?.id == itemId,
+            );
+            if (existingItem != null) {
+              existingItem.quantity += 1;
+            }
           }
           cart.refresh();
         }
         // --------------------------------
         setError(fail.message);
-        DPrint.log("Favorite success result : ${fail.message}");
+        d_print.log("Favorite success result : ${fail.message}");
         setLoading(false);
       },
       (success) async {
-        DPrint.log("Favorite success result : ${success.message}");
+        d_print.log("Favorite success result : ${success.message}");
         await fetchCart();
         // Get.snackbar(
         //   "Removed",
@@ -334,10 +341,10 @@ class OrderController extends BaseController {
 
     result.fold(
       (fail) {
-        DPrint.log("Fetch Orders Failed: ${fail.message}");
+        d_print.log("Fetch Orders Failed: ${fail.message}");
       },
       (success) {
-        DPrint.log("Raw order data: ${success.data}");
+        d_print.log("Raw order data: ${success.data}");
         ongoingOrder.value = success.data;
       },
     );
@@ -348,10 +355,10 @@ class OrderController extends BaseController {
 
     result.fold(
       (fail) {
-        DPrint.log("Fetch Orders Failed: ${fail.message}");
+        d_print.log("Fetch Orders Failed: ${fail.message}");
       },
       (success) {
-        DPrint.log("Raw order data: ${success.data}");
+        d_print.log("Raw order data: ${success.data}");
         completedOrder.value = success.data;
       },
     );
@@ -365,7 +372,7 @@ class OrderController extends BaseController {
     bool pickOrder,
   ) async {
     final userId = await _authStorageService.getUserId();
-    DPrint.log('UserId: $userId');
+    d_print.log('UserId: $userId');
     if (userId == null || userId.isEmpty) {
       setError('User ID not found. Please log in again.');
       Get.snackbar('Error', 'User ID not found. Please log in again.');
@@ -386,10 +393,10 @@ class OrderController extends BaseController {
     result.fold(
       (fail) {
         setError(fail.message);
-        DPrint.log("Place Order success result : ${fail.message}");
+        d_print.log("Place Order success result : ${fail.message}");
       },
       (success) {
-        DPrint.log("Place order result : ${success.data.id}");
+        d_print.log("Place order result : ${success.data.id}");
         Get.offAll(() => NavigationMenu());
       },
     );
@@ -397,7 +404,7 @@ class OrderController extends BaseController {
 
   Future<void> reOrder(String id) async {
     final userId = await _authStorageService.getUserId();
-    DPrint.log('UserId: $userId');
+    d_print.log('UserId: $userId');
     if (userId == null || userId.isEmpty) {
       setError('User ID not found. Please log in again.');
       Get.snackbar('Error', 'User ID not found. Please log in again.');
@@ -411,10 +418,10 @@ class OrderController extends BaseController {
     result.fold(
       (fail) {
         setError(fail.message);
-        DPrint.log("Place Order success result : ${fail.message}");
+        d_print.log("Place Order success result : ${fail.message}");
       },
       (success) {
-        DPrint.log("Place order result : ${success.data.id}");
+        d_print.log("Place order result : ${success.data.id}");
         // Get.snackbar(
         //   "Success",
         //   "Item added to the cart",

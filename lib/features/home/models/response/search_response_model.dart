@@ -17,7 +17,8 @@ class SearchResponseModel {
       page: json['page'],
       pages: json['pages'],
       items: List<ProductItem>.from(
-          json['items'].map((item) => ProductItem.fromJson(item))),
+        json['items'].map((item) => ProductItem.fromJson(item)),
+      ),
     );
   }
 
@@ -37,6 +38,7 @@ class ProductItem {
   final String description;
   final double price;
   final String image;
+  final List<String> images;
   final Category category;
   final List<Ingredient> ingredients;
   final double rating;
@@ -48,6 +50,7 @@ class ProductItem {
     required this.description,
     required this.price,
     required this.image,
+    required this.images,
     required this.category,
     required this.ingredients,
     required this.rating,
@@ -61,9 +64,11 @@ class ProductItem {
       description: json['description'],
       price: (json['price'] as num).toDouble(),
       image: json['image'],
+      images: List<String>.from(json['images'] ?? []),
       category: Category.fromJson(json['category']),
       ingredients: List<Ingredient>.from(
-          json['ingredients'].map((i) => Ingredient.fromJson(i))),
+        json['ingredients'].map((i) => Ingredient.fromJson(i)),
+      ),
       rating: (json['rating'] as num).toDouble(),
       reviewsCount: json['reviewsCount'],
     );
@@ -76,6 +81,7 @@ class ProductItem {
       'description': description,
       'price': price,
       'image': image,
+      'images': images,
       'category': category.toJson(),
       'ingredients': ingredients.map((i) => i.toJson()).toList(),
       'rating': rating,
@@ -92,19 +98,11 @@ class Category {
   Category({required this.id, required this.name, required this.image});
 
   factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
-      id: json['_id'],
-      name: json['name'],
-      image: json['image'],
-    );
+    return Category(id: json['_id'], name: json['name'], image: json['image']);
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'name': name,
-      'image': image,
-    };
+    return {'_id': id, 'name': name, 'image': image};
   }
 }
 
@@ -124,10 +122,6 @@ class Ingredient {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'name': name,
-      'isAllergen': isAllergen,
-    };
+    return {'_id': id, 'name': name, 'isAllergen': isAllergen};
   }
 }

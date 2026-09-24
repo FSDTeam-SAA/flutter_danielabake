@@ -1,8 +1,5 @@
-import 'package:danielabake/features/auth/controller/auth_controller.dart';
-import 'package:danielabake/features/profile_screens/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../home/controller/cart_controller.dart';
 import '../controller/order_controller.dart';
 import '../models/response/get_cart_response_model.dart';
 
@@ -13,7 +10,6 @@ class CartItemCard extends StatelessWidget {
 
   // Reactive quantity
   final RxInt quantity = 0.obs;
-  final RxInt quantity1 = 0.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +44,8 @@ class CartItemCard extends StatelessWidget {
     quantity.value = cartItem.quantity;
     final OrderController controller = Get.find<OrderController>();
 
-    final item = cartItem.item;
-    final price = item?.price ?? 0.0;
+    final item = cartItem.item!;
+    final price = item.price;
 
     return Stack(
       clipBehavior: Clip.none,
@@ -57,7 +53,7 @@ class CartItemCard extends StatelessWidget {
         // MAIN CARD
         Container(
           padding: const EdgeInsets.all(16),
-          margin: const EdgeInsets.symmetric(vertical: 12,),
+          margin: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
             color: const Color(0x2EFFB972), // soft peach color
             borderRadius: BorderRadius.circular(18),
@@ -75,7 +71,7 @@ class CartItemCard extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: Image.network(
-                        item!.image,
+                        item.image,
                         width: 100,
                         height: 100,
                         fit: BoxFit.cover,
@@ -92,7 +88,9 @@ class CartItemCard extends StatelessWidget {
                           Text(
                             item.name,
                             style: const TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 14),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14,
+                            ),
                           ),
                           const SizedBox(height: 4),
                           Text(
@@ -114,7 +112,7 @@ class CartItemCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '\$${price?.toStringAsFixed(2)}',
+                          '\$${price.toStringAsFixed(2)}',
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
@@ -134,24 +132,27 @@ class CartItemCard extends StatelessWidget {
                                 _squareButton(
                                   icon: Icons.remove,
                                   onTap: () {
-                                    Get.find<AuthController>().logout();
                                     if (quantity.value > 1) {
                                       quantity.value--;
                                       cartItem.quantity = quantity.value;
-                                      controller.removeOneItemFromCart(cartItem.item!.id);
+                                      controller.removeOneItemFromCart(
+                                        cartItem.item!.id,
+                                      );
                                     }
                                   },
                                 ),
                                 Padding(
-                                  padding:
-                                  const EdgeInsets.symmetric(horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ),
                                   child: Obx(
-                                        () => Text(
+                                    () => Text(
                                       '${quantity.value}',
                                       style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white,
-                                          fontSize: 16),
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -160,8 +161,7 @@ class CartItemCard extends StatelessWidget {
                                   onTap: () {
                                     quantity.value++;
                                     cartItem.quantity = quantity.value;
-                                    controller.addCart(
-                                        cartItem.item!.id, quantity1.value);
+                                    controller.addCart(cartItem.item!.id, 1);
                                   },
                                 ),
                               ],
@@ -183,7 +183,7 @@ class CartItemCard extends StatelessWidget {
 
                 // BOTTOM TOTAL
                 Obx(
-                      () => Row(
+                  () => Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
@@ -194,7 +194,7 @@ class CartItemCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '\$${(price! * quantity.value).toStringAsFixed(2)}',
+                        '\$${(price * quantity.value).toStringAsFixed(2)}',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -216,18 +216,14 @@ class CartItemCard extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 8.0),
             child: GestureDetector(
               onTap: () {
-                controller.removeCart(cartItem.item!.id); // This now removes instantly!
+                controller.removeCart(
+                  cartItem.item!.id,
+                ); // This now removes instantly!
               },
               child: Container(
                 padding: const EdgeInsets.all(4),
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.close,
-                  size: 20,
-                  color: Colors.grey,
-                ),
+                decoration: const BoxDecoration(shape: BoxShape.circle),
+                child: const Icon(Icons.close, size: 20, color: Colors.grey),
               ),
             ),
           ),
@@ -242,11 +238,7 @@ class CartItemCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(3),
-        child: Icon(
-          icon,
-          size: 18,
-          color: Colors.white,
-        ),
+        child: Icon(icon, size: 18, color: Colors.white),
       ),
     );
   }
