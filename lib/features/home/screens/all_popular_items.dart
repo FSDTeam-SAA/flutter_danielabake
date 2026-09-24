@@ -20,6 +20,7 @@ class AllPopularItems extends StatefulWidget {
 class _AllPopularItemsState extends State<AllPopularItems> {
   final _homeController = Get.find<HomeController>();
   final _cartController = Get.find<OrderController>();
+  final _favoriteFoodController = Get.find<FavoriteFoodController>();
 
   final TextEditingController _searchController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -31,6 +32,7 @@ class _AllPopularItemsState extends State<AllPopularItems> {
     super.initState();
     _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _favoriteFoodController.fetchFavoriteItem();
       _homeController.fetchAllPopularItem();
     });
   }
@@ -155,63 +157,68 @@ class _AllPopularItemsState extends State<AllPopularItems> {
                     mainAxisSpacing: width * 0.025,
                   ),
                   itemCount: items.length,
-            itemBuilder: (_, index) {
-              final item = items[index];
-              final isFav = false.obs;
+                  itemBuilder: (_, index) {
+                    final item = items[index];
+                    final isFav = _favoriteFoodController
+                        .isFavoriteItem(item.id)
+                        .obs;
 
-              return GestureDetector(
-                onTap: () {
-                  Get.to(
-                    () => FoodDetailScreen(
-                      food: FoodModel(
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(
+                          () => FoodDetailScreen(
+                            food: FoodModel(
+                              title: item.name,
+                              description: item.description,
+                              image: item.image,
+                              ingredients: item.ingredients,
+                              price: item.price.toString(),
+                              id: item.id,
+                              images: item.images,
+                              //rating: item.rating, reviewsCount: item.reviewsCount,
+                            ),
+                          ),
+                        );
+                      },
+
+                      child: FoodCard(
+                        imagePath: item.image,
                         title: item.name,
                         description: item.description,
-                        image: item.image,
-                        ingredients: item.ingredients,
                         price: item.price.toString(),
-                        id: item.id,
-                        images: item.images,
-                        //rating: item.rating, reviewsCount: item.reviewsCount,
+                        itemId: item.id,
+                        isFavorite: isFav,
+                        onAdd: () async {
+                          try {
+                            final success = await _cartController.addCart(
+                              item.id,
+                              1,
+                            );
+                            if (success) {
+                              // Get.snackbar(
+                              //   "Success",
+                              //   '${item.name} added to cart',
+                              //   backgroundColor: Colors.green,
+                              //   colorText: Colors.white,
+                              //   snackPosition: SnackPosition.BOTTOM,
+                              //   margin: const EdgeInsets.all(12),
+                              //   duration: const Duration(seconds: 2),
+                              // );
+                            }
+                          } catch (e) {
+                            Get.snackbar('Error', 'Failed to add ${item.name}');
+                          }
+                        },
+                        onFavoriteToggle: (value) async {
+                          // Logic handled inside FoodCard
+                        },
+                        rating: item.rating,
+                        reviewCount: item.reviewsCount,
                       ),
-                    ),
-                  );
-                },
-
-                child: FoodCard(
-                  imagePath: item.image,
-                  title: item.name,
-                  description: item.description,
-                  price: item.price.toString(),
-                  itemId: item.id,
-                  isFavorite: isFav,
-                  onAdd: () async {
-                    try {
-                      final success = await _cartController.addCart(item.id, 1);
-                      if (success) {
-                        // Get.snackbar(
-                        //   "Success",
-                        //   '${item.name} added to cart',
-                        //   backgroundColor: Colors.green,
-                        //   colorText: Colors.white,
-                        //   snackPosition: SnackPosition.BOTTOM,
-                        //   margin: const EdgeInsets.all(12),
-                        //   duration: const Duration(seconds: 2),
-                        // );
-                      }
-                    } catch (e) {
-                      Get.snackbar('Error', 'Failed to add ${item.name}');
-                    }
+                    );
                   },
-                  onFavoriteToggle: (value) async {
-                    // Logic handled inside FoodCard
-                  },
-                  rating: item.rating,
-                  reviewCount: item.reviewsCount,
                 ),
-              );
-            },
-          ),
-        ),
+              ),
               if (_homeController.isLoadMore.value)
                 const Padding(
                   padding: EdgeInsets.all(8.0),

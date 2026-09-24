@@ -30,6 +30,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _homeController = Get.find<HomeController>();
   final _cartController = Get.find<OrderController>();
+  final _favoriteFoodController = Get.find<FavoriteFoodController>();
 
   final RxString selectedDay = 'Today'.obs;
   @override
@@ -37,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _favoriteFoodController.fetchFavoriteItem();
       _homeController.fetchPopularItem(mapDayForApi('Today'));
       _homeController.fetchWeeklyMenu();
     });
@@ -248,8 +250,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: data.items.length,
                   itemBuilder: (_, index) {
                     final item = data.items[index];
-                    final isFavorite = false
-                        .obs; // ← consider moving this outside if you want real favorite state
+                    final isFavorite = _favoriteFoodController
+                        .isFavoriteItem(item.id)
+                        .obs;
 
                     return GestureDetector(
                       onTap: () {

@@ -1,4 +1,5 @@
 import 'package:danielabake/features/home/controller/category_controller.dart';
+import 'package:danielabake/features/home/controller/favorite_food_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../Order_screen/controller/order_controller.dart';
@@ -22,6 +23,7 @@ class FoodListScreen extends StatefulWidget {
 
 class _FoodListScreenState extends State<FoodListScreen> {
   final _cartController = Get.find<OrderController>();
+  final _favoriteFoodController = Get.find<FavoriteFoodController>();
   final controller = Get.put(CategoryController());
   // create controller if not exists
   @override
@@ -29,6 +31,7 @@ class _FoodListScreenState extends State<FoodListScreen> {
     super.initState();
     // Fetch items with a high limit to show all available items
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _favoriteFoodController.fetchFavoriteItem();
       controller.fetchItems(widget.categoryId, limit: 1000);
     });
   }
@@ -82,7 +85,9 @@ class _FoodListScreenState extends State<FoodListScreen> {
               final food = foods[index];
 
               // Reactive favorite variable
-              final isFavorite = false.obs;
+              final isFavorite = _favoriteFoodController
+                  .isFavoriteItem(food.id)
+                  .obs;
 
               return GestureDetector(
                 onTap: () {

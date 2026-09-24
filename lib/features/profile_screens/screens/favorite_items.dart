@@ -120,11 +120,6 @@ class _FavoriteItemsState extends State<FavoriteItems> {
                     isFavorite: true.obs,
                     description: food.description,
                     onAdd: () => print('Add ${food.name}'),
-                    onFavoriteToggle: (val) async {
-                      if (!val) {
-                        await _favoriteFoodController.removeFavorite(food.id);
-                      }
-                    },
                   );
                 },
               );

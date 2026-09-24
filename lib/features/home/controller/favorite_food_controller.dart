@@ -16,6 +16,7 @@ class FavoriteFoodController extends BaseController {
   final AuthStorageService _authStorageService = AuthStorageService();
   final RxList<GetFavoriteItemsResponseModel> favoriteItems =
       <GetFavoriteItemsResponseModel>[].obs;
+  final RxList<String> favoriteItemIds = <String>[].obs;
 
   @override
   void onInit() {
@@ -55,6 +56,10 @@ class FavoriteFoodController extends BaseController {
 
     return result.fold(
       (fail) {
+        if (fail.message.toLowerCase().contains("already")) {
+          setFavoriteState(itemId, true);
+          return true;
+        }
         setError(fail.message);
         DPrint.log("Favorite success result : ${fail.message}");
         setLoading(false);
@@ -62,6 +67,7 @@ class FavoriteFoodController extends BaseController {
       },
       (success) {
         DPrint.log("Favorite success result : ${success.data.id}");
+        setFavoriteState(itemId, true);
         // Get.snackbar(
         //   "Success",
         //   "Item added to favorites",
@@ -78,6 +84,8 @@ class FavoriteFoodController extends BaseController {
     final userId = await _authStorageService.getUserId();
     if (userId == null || userId.isEmpty) {
       // Guest user: just return empty list, no error
+      favoriteItems.clear();
+      favoriteItemIds.clear();
       return;
     }
 
@@ -89,9 +97,26 @@ class FavoriteFoodController extends BaseController {
       final cleanList = success.data.where((e) => e.item != null).toList();
 
       favoriteItems.assignAll(cleanList);
+      favoriteItemIds.assignAll(
+        cleanList.map((entry) => entry.item!.id).toSet().toList(),
+      );
     });
 
     setLoading(false);
+  }
+
+  bool isFavoriteItem(String itemId) => favoriteItemIds.contains(itemId);
+
+  void setFavoriteState(String itemId, bool isFavorite) {
+    if (isFavorite) {
+      if (!favoriteItemIds.contains(itemId)) {
+        favoriteItemIds.add(itemId);
+      }
+    } else {
+      favoriteItemIds.remove(itemId);
+    }
+
+    favoriteItemIds.refresh();
   }
 
   Future<bool> removeFavorite(String itemId) async {
@@ -117,6 +142,7 @@ class FavoriteFoodController extends BaseController {
         // INSTANT UI UPDATE — Remove from observable list
         favoriteItems.removeWhere((entry) => entry.item?.id == itemId);
         favoriteItems.refresh();
+        setFavoriteState(itemId, false);
 
         // Get.snackbar(
         //   "Removed",

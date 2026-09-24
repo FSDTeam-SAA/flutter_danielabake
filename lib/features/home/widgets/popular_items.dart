@@ -123,11 +123,21 @@ class FoodCard extends StatelessWidget {
                       ),
                     ),
 
-                    Obx(
-                      () => InkWell(
+                    Obx(() {
+                      final isItemFavorite = favoriteController.isFavoriteItem(
+                        itemId,
+                      );
+
+                      return InkWell(
                         onTap: () async {
+                          final currentValue = favoriteController
+                              .isFavoriteItem(itemId);
+                          final newValue = !currentValue;
                           try {
-                            final newValue = !isFavorite.value;
+                            favoriteController.setFavoriteState(
+                              itemId,
+                              newValue,
+                            );
                             isFavorite.value = newValue;
 
                             bool success = false;
@@ -144,11 +154,18 @@ class FoodCard extends StatelessWidget {
                             }
 
                             if (!success) {
-                              isFavorite.value =
-                                  !newValue; // Revert if failed or guest
+                              favoriteController.setFavoriteState(
+                                itemId,
+                                currentValue,
+                              );
+                              isFavorite.value = currentValue;
                             }
                           } catch (e) {
-                            isFavorite.value = !isFavorite.value;
+                            favoriteController.setFavoriteState(
+                              itemId,
+                              currentValue,
+                            );
+                            isFavorite.value = currentValue;
                             DPrint.log("Favorite toggle error: $e");
                           }
                         },
@@ -156,15 +173,15 @@ class FoodCard extends StatelessWidget {
                           radius: 12,
                           backgroundColor: const Color(0xBD3C84F0),
                           child: Icon(
-                            isFavorite.value
+                            isItemFavorite
                                 ? Icons.favorite
                                 : Icons.favorite_border,
                             color: Colors.white,
                             size: 16,
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    }),
                   ],
                 ),
                 const SizedBox(height: 4),
