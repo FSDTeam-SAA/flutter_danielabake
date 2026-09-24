@@ -1,7 +1,6 @@
 import 'package:danielabake/core/common/widgets/app_scaffold.dart';
 import 'package:danielabake/core/common/widgets/button_widgets.dart';
 import 'package:danielabake/features/Order_screen/screens/checkout2.dart';
-import 'package:danielabake/features/Order_screen/screens/checkout_screen.dart';
 import 'package:danielabake/features/Order_screen/widget/cart_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,8 +23,6 @@ class _OrderScreensState extends State<OrderScreens> {
     controller.fetchCart();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
@@ -42,8 +39,14 @@ class _OrderScreensState extends State<OrderScreens> {
       ),
       body: Column(
         children: [
-
-          Text('We kindly require a minimum of two days\' notice for all orders', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF7F3615)),),
+          const Text(
+            'We kindly require a minimum of two days\' notice for all orders',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF7F3615),
+            ),
+          ),
           // Cart Items Section
           Expanded(
             child: Obx(() {
@@ -57,12 +60,17 @@ class _OrderScreensState extends State<OrderScreens> {
               }
 
               // After loading, check if cart is empty
-              if (controller.cart.value == null || controller.cart.value!.items.isEmpty) {
+              if (controller.cart.value == null ||
+                  controller.cart.value!.items.isEmpty) {
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.shopping_cart_outlined, size: 80, color: Colors.grey[400]),
+                      Icon(
+                        Icons.shopping_cart_outlined,
+                        size: 80,
+                        color: Colors.grey[400],
+                      ),
                       const SizedBox(height: 16),
                       Text(
                         'Your cart is empty',
@@ -91,17 +99,31 @@ class _OrderScreensState extends State<OrderScreens> {
 
           // Only show the button if there are items in the cart
           Obx(() {
-            final hasItems = controller.cart.value != null &&
-                controller.cart.value!.items.isNotEmpty &&
+            final cart = controller.cart.value;
+            final hasItems =
+                cart != null &&
+                cart.items.isNotEmpty &&
                 !controller.isLoading.value;
 
             if (hasItems) {
+              final subtotal = cart.items.fold<double>(
+                0,
+                (sum, item) => sum + ((item.item?.price ?? 0) * item.quantity),
+              );
+
               return Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: PrimaryButton(
-                  text: 'Continue to Checkout',
-                  key: Key("order-screen"),
-                  onSimplePressed: () => Get.to(() => Checkout2Screen()),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _priceRow('Subtotal', subtotal),
+                    const SizedBox(height: 10),
+                    PrimaryButton(
+                      text: 'Continue to Checkout',
+                      key: const Key("order-screen"),
+                      onSimplePressed: () => Get.to(() => Checkout2Screen()),
+                    ),
+                  ],
                 ),
               );
             }
@@ -109,6 +131,22 @@ class _OrderScreensState extends State<OrderScreens> {
           }),
         ],
       ),
+    );
+  }
+
+  Widget _priceRow(String label, double amount) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        Text(
+          '\$${amount.toStringAsFixed(2)}',
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+      ],
     );
   }
 }

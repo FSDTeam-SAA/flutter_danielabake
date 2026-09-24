@@ -2,16 +2,11 @@ import 'package:danielabake/core/common/widgets/button_widgets.dart';
 import 'package:danielabake/features/Order_screen/controller/order_controller.dart';
 import 'package:danielabake/features/Order_screen/screens/checkout2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutx_core/core/debug_print.dart';
 import 'package:get/get.dart';
 
 import '../../../core/common/widgets/app_scaffold.dart';
 import '../../../core/network/services/auth_storage_service.dart';
-import '../../../core/utils/app_svg.dart';
 import '../../review_rating/controllers/rating_controller.dart';
-import '../../review_rating/widget/review_card.dart';
-import '../controller/cart_controller.dart';
-import '../widgets/ingredients_list.dart';
 import '../widgets/models/detail_food_model.dart';
 
 class FoodDetailScreen extends StatefulWidget {
@@ -27,8 +22,8 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   final _orderController = Get.find<OrderController>();
   final ratingController = Get.find<RatingController>();
   final AuthStorageService _authStorageService = AuthStorageService();
-  final RxString selectedImage = ''.obs;
-  
+  final RxInt selectedImageIndex = 0.obs;
+
   final PageController _pageController = PageController();
 
   final Rx<String?> currentUserId = Rx<String?>(null);
@@ -37,7 +32,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   @override
   void initState() {
     super.initState();
-    selectedImage.value = widget.food.image;
     _initializeQuantity();
     ratingController.getReview(widget.food.id);
     _loadCurrentUserId(); // Fetch reviews
@@ -67,8 +61,43 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
     quantity.value = cartItem?.quantity ?? 0;
   }
 
+  List<String> get _galleryImages {
+    final images = <String>[];
+
+    void addImage(String? image) {
+      final trimmedImage = image?.trim();
+      if (trimmedImage != null &&
+          trimmedImage.isNotEmpty &&
+          !images.contains(trimmedImage)) {
+        images.add(trimmedImage);
+      }
+    }
+
+    addImage(widget.food.image);
+    widget.food.images?.forEach(addImage);
+
+    return images;
+  }
+
+  void _showGalleryImage(int index) {
+    final galleryImages = _galleryImages;
+    if (index < 0 || index >= galleryImages.length) return;
+
+    selectedImageIndex.value = index;
+
+    if (_pageController.hasClients) {
+      _pageController.animateToPage(
+        index,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final galleryImages = _galleryImages;
+
     return AppScaffold(
       removePadding: true,
       appBar: AppBar(
@@ -187,82 +216,177 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
-                    child: (widget.food.images != null && widget.food.images!.isNotEmpty)
-                        ? PageView.builder(
-                            controller: _pageController,
-                            itemCount: widget.food.images!.length,
-                            onPageChanged: (index) {
-                              selectedImage.value = widget.food.images![index];
-                            },
-                            itemBuilder: (context, index) {
-                              return Image.network(
-                                widget.food.images![index],
-                                //fit: BoxFit.contain,
-                                errorBuilder: (_, __, ___) => const Center(
-                                    child: Icon(Icons.image_not_supported)),
-                              );
-                            },
-                          )
-                        : Obx(
-                            () => Image.network(
-                              selectedImage.value,
-                              //fit: BoxFit.cover,
-                              errorBuilder: (_, __, ___) => const Center(
-                                  child: Icon(Icons.image_not_supported)),
-                            ),
+                    child: galleryImages.isEmpty
+                        ? const Center(child: Icon(Icons.image_not_supported))
+                        : Stack(
+                            children: [
+                              PageView.builder(
+                                controller: _pageController,
+                                itemCount: galleryImages.length,
+                                onPageChanged: (index) {
+                                  selectedImageIndex.value = index;
+                                },
+                                itemBuilder: (context, index) {
+                                  return Image.network(
+                                    galleryImages[index],
+                                    width: double.infinity,
+                                    height: 250,
+                                    fit: BoxFit.contain,
+                                    errorBuilder: (_, __, ___) => const Center(
+                                      child: Icon(Icons.image_not_supported),
+                                    ),
+                                  );
+                                },
+                              ),
+                              if (galleryImages.length > 1) ...[
+                                Positioned(
+                                  left: 8,
+                                  top: 0,
+                                  bottom: 0,
+                                  child: Center(
+                                    child: _galleryNavButton(
+                                      icon: Icons.chevron_left,
+                                      onTap: () {
+                                        final currentIndex =
+                                            selectedImageIndex.value;
+                                        final previousIndex = currentIndex == 0
+                                            ? galleryImages.length - 1
+                                            : currentIndex - 1;
+                                        _showGalleryImage(previousIndex);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 8,
+                                  top: 0,
+                                  bottom: 0,
+                                  child: Center(
+                                    child: _galleryNavButton(
+                                      icon: Icons.chevron_right,
+                                      onTap: () {
+                                        final currentIndex =
+                                            selectedImageIndex.value;
+                                        final nextIndex =
+                                            (currentIndex + 1) %
+                                            galleryImages.length;
+                                        _showGalleryImage(nextIndex);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 12,
+                                  right: 12,
+                                  child: Obx(
+                                    () => Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 5,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0x8C000000),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Text(
+                                        '${selectedImageIndex.value + 1}/${galleryImages.length}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                // Positioned(
+                                //   left: 40,
+                                //   right: 40,
+                                //   bottom: 10,
+                                //   child: Obx(
+                                //     () => SingleChildScrollView(
+                                //       scrollDirection: Axis.horizontal,
+                                //       child: Row(
+                                //         mainAxisAlignment:
+                                //             MainAxisAlignment.center,
+                                //         children: List.generate(
+                                //           galleryImages.length,
+                                //           (index) {
+                                //             final isSelected =
+                                //                 selectedImageIndex.value ==
+                                //                 index;
+
+                                //             return AnimatedContainer(
+                                //               duration: const Duration(
+                                //                 milliseconds: 200,
+                                //               ),
+                                //               margin:
+                                //                   const EdgeInsets.symmetric(
+                                //                     horizontal: 3,
+                                //                   ),
+                                //               width: isSelected ? 16 : 7,
+                                //               height: 7,
+                                //               decoration: BoxDecoration(
+                                //                 color: isSelected
+                                //                     ? const Color(0xFF1566CD)
+                                //                     : const Color(0xBFFFFFFF),
+                                //                 borderRadius:
+                                //                     BorderRadius.circular(20),
+                                //               ),
+                                //             );
+                                //           },
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
+                              ],
+                            ],
                           ),
                   ),
                 ),
               ),
             ),
 
-            /// Extra Food Images (5 images)
-            /// Extra Food Images (max 5)
-            if (widget.food.images != null && widget.food.images!.isNotEmpty)
+            /// Extra Food Images
+            if (galleryImages.length > 1)
               Padding(
-                padding: const EdgeInsets.only(top: 12, left: 12),
+                padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
                 child: SizedBox(
                   height: 80,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemCount: widget.food.images!.length > 5
-                        ? 5
-                        : widget.food.images!.length,
+                    itemCount: galleryImages.length,
                     separatorBuilder: (_, __) => const SizedBox(width: 10),
                     itemBuilder: (context, index) {
-                      final image = widget.food.images![index];
+                      final image = galleryImages[index];
 
                       return GestureDetector(
                         onTap: () {
-                          selectedImage.value = image; // 👈 GetX update
-                          if (_pageController.hasClients) {
-                             _pageController.animateToPage(
-                               index,
-                               duration: const Duration(milliseconds: 300),
-                               curve: Curves.easeInOut,
-                             );
-                          }
+                          _showGalleryImage(index);
                         },
                         child: Obx(
-                          () => ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: selectedImage.value == image
-                                      ? Color(0x991566CD)
-                                      : Colors.transparent,
-                                  width: 2,
-                                ),
+                          () => Container(
+                            width: 80,
+                            height: 80,
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: selectedImageIndex.value == index
+                                    ? const Color(0x991566CD)
+                                    : Colors.transparent,
+                                width: 2,
                               ),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
                               child: Image.network(
                                 image,
-                                width: 80,
-                                height: 80,
-                               fit: BoxFit.fill,
+                                width: double.infinity,
+                                height: double.infinity,
+                                fit: BoxFit.cover,
                                 errorBuilder: (_, __, ___) => Container(
-                                  width: 80,
-                                  height: 80,
                                   color: Colors.grey.shade200,
                                   child: const Icon(Icons.image_not_supported),
                                 ),
@@ -480,6 +604,24 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
           borderRadius: BorderRadius.circular(6),
         ),
         child: Icon(icon, size: 18, color: Colors.white),
+      ),
+    );
+  }
+
+  Widget _galleryNavButton({
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: const Color(0x61000000),
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(6),
+          child: Icon(icon, color: Colors.white, size: 28),
+        ),
       ),
     );
   }

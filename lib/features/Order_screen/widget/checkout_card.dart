@@ -1,7 +1,6 @@
 import 'package:danielabake/features/Order_screen/controller/order_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../home/controller/cart_controller.dart';
 import '../models/response/get_cart_response_model.dart';
 
 class CheckoutCard extends StatelessWidget {
@@ -11,18 +10,17 @@ class CheckoutCard extends StatelessWidget {
 
   // Reactive quantity
   final RxInt quantity = 0.obs;
-  final RxInt quantity1 = 0.obs;
 
   @override
   Widget build(BuildContext context) {
     // inside CheckoutCard widget
     final OrderController controller = Get.find<OrderController>();
 
-    quantity.value = cartItem.quantity!;
+    quantity.value = cartItem.quantity;
 
-    final item = cartItem.item;
+    final item = cartItem.item!;
 
-    final price = item?.price;
+    final price = item.price;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -42,7 +40,7 @@ class CheckoutCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.network(
-                  item!.image,
+                  item.image,
                   width: 100,
                   height: 100,
                   fit: BoxFit.cover,
@@ -59,7 +57,9 @@ class CheckoutCard extends StatelessWidget {
                     Text(
                       item.name,
                       style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 14),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -80,19 +80,18 @@ class CheckoutCard extends StatelessWidget {
               Column(
                 children: [
                   Obx(
-                        () => Text(
-                      '\$${(price! * quantity.value).toStringAsFixed(2)}',
+                    () => Text(
+                      '\$${(price * quantity.value).toStringAsFixed(2)}',
                       style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
                       ),
                     ),
                   ),
-                  SizedBox(height: 40,),
+                  SizedBox(height: 40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-
                       //here you have to add remove  cart api
                       _squareButton(
                         icon: Icons.remove,
@@ -101,16 +100,17 @@ class CheckoutCard extends StatelessWidget {
                             quantity.value--;
                             cartItem.quantity = quantity.value;
 
-                            controller.removeOneItemFromCart(cartItem.item!.id); // <-- API CALL
+                            controller.removeOneItemFromCart(
+                              cartItem.item!.id,
+                            ); // <-- API CALL
                           }
                         },
                       ),
 
-
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         child: Obx(
-                              () => Text(
+                          () => Text(
                             '${quantity.value}',
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
@@ -127,7 +127,10 @@ class CheckoutCard extends StatelessWidget {
                           quantity.value++;
                           cartItem.quantity = quantity.value;
 
-                          controller.addCart(cartItem.item!.id, quantity1.value); // <-- API CALL
+                          controller.addCart(
+                            cartItem.item!.id,
+                            1,
+                          ); // <-- API CALL
                         },
                       ),
                     ],
@@ -151,11 +154,7 @@ class CheckoutCard extends StatelessWidget {
           color: const Color(0xFF4C8FFF),
           borderRadius: BorderRadius.circular(6),
         ),
-        child: Icon(
-          icon,
-          size: 18,
-          color: Colors.white,
-        ),
+        child: Icon(icon, size: 18, color: Colors.white),
       ),
     );
   }

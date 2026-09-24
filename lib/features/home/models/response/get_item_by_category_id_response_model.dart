@@ -18,7 +18,9 @@ class GetItemByCategoryIdResponseModel {
       total: json["total"],
       page: json["page"],
       pages: json["pages"],
-      items: List<FoodItem>.from(json["items"].map((x) => FoodItem.fromJson(x))),
+      items: List<FoodItem>.from(
+        json["items"].map((x) => FoodItem.fromJson(x)),
+      ),
     );
   }
 }
@@ -29,6 +31,7 @@ class FoodItem {
   final String description;
   final double price;
   final String image;
+  final List<String> images;
   final Category category;
   final List<ItemIngredient> ingredients;
   final double rating;
@@ -40,6 +43,7 @@ class FoodItem {
     required this.description,
     required this.price,
     required this.image,
+    required this.images,
     required this.category,
     required this.ingredients,
     required this.rating,
@@ -53,6 +57,7 @@ class FoodItem {
       description: json["description"],
       price: (json["price"] as num).toDouble(),
       image: json["image"],
+      images: List<String>.from(json["images"] ?? []),
       category: Category.fromJson(json["category"]),
       ingredients: List<ItemIngredient>.from(
         json["ingredients"].map((x) => ItemIngredient.fromJson(x)),
@@ -68,18 +73,10 @@ class Category {
   final String name;
   final String image;
 
-  Category({
-    required this.id,
-    required this.name,
-    required this.image,
-  });
+  Category({required this.id, required this.name, required this.image});
 
   factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
-      id: json["_id"],
-      name: json["name"],
-      image: json["image"],
-    );
+    return Category(id: json["_id"], name: json["name"], image: json["image"]);
   }
 }
 
@@ -105,4 +102,3 @@ class Category {
 //     );
 //   }
 // }
-
