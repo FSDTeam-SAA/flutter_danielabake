@@ -175,7 +175,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                 const SizedBox(height: 15),
 
                 PrimaryButton(
-                  text: 'Place Order',
+                  text: 'Add to Cart',
                   key: const Key("food-details-screen"),
                   onSimplePressed: () {
                     if (quantity.value == 0) {
