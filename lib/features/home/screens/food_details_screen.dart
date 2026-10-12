@@ -1,6 +1,6 @@
 import 'package:danielabake/core/common/widgets/button_widgets.dart';
 import 'package:danielabake/features/Order_screen/controller/order_controller.dart';
-import 'package:danielabake/features/Order_screen/screens/checkout2.dart';
+import 'package:danielabake/features/Order_screen/screens/order_screens.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -191,7 +191,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                       );
                       return;
                     }
-                    Get.to(() => Checkout2Screen());
+                    Get.to(() => const OrderScreens());
                   },
                 ),
               ],
